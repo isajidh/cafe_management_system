@@ -1,0 +1,12 @@
+﻿using CafeEmployeeManager.API.Model;
+using CafeEmployeeManager.API.Model.Request_Body;
+
+namespace CafeEmployeeManager.API.Repositories
+{
+    public interface IEmployeeRepository : IRepository<Employee>
+    {
+        Task<(int, string)> AddEmployeeWithCafeRelationship(EmployeeRequestBody request);
+
+    }
+
+}

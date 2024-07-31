@@ -1,0 +1,4 @@
+docker build -t spareparts_api:1.0 -f Dockerfile .
+
+
+docker run -d -p 8080:80 spareparts_api:1.0
