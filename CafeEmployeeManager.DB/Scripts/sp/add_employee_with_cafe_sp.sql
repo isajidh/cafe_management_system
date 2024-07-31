@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_employee_with_cafe`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_employee_with_cafe_sp`(
     IN p_name VARCHAR(100),
     IN p_email_address VARCHAR(100),
     IN p_phone_number VARCHAR(10),
@@ -11,6 +11,7 @@ BEGIN
 	DECLARE v_cafe_name VARCHAR(255);
 	DECLARE v_days_worked INT;
 
+-- --------------------------------------------------------------------------------------
     -- Declare variables for error handling
     DECLARE result_code INT DEFAULT 0;
     DECLARE result_message TEXT DEFAULT '';
@@ -30,12 +31,11 @@ BEGIN
         -- Output general error message and error code
         SELECT -1 AS result_code, CONCAT('Error: ', result_message) AS Message;
     END;
-
 -- ---------------------------------------------------------------------
     -- Validate phone number (starts with 9 or 8)
     IF LEFT(p_phone_number, 1) NOT IN ('9', '8') THEN
         SET result_message = 'Phone number must start with 9 or 8';
-        SET result_code = -2;
+        SET result_code = -1;
         SIGNAL SQLSTATE '45000';
     ELSE
         -- Start the transaction

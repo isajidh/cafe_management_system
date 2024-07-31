@@ -5,12 +5,34 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `employee_i_sp`(
     IN p_gender ENUM('Male', 'Female')
 )
 BEGIN
-    DECLARE p_id VARCHAR(10);
+	DECLARE p_id VARCHAR(10);
+-- --------------------------------------------------------------------------------------
+    -- Declare variables for error handling
+    DECLARE result_code INT DEFAULT 0;
+    DECLARE result_message TEXT DEFAULT '';
+    DECLARE success_message VARCHAR(255) DEFAULT 'Procedure executed successfully.';
 
+    -- Declare the exit handler for SQL exceptions
+    DECLARE exit handler FOR SQLEXCEPTION
+    BEGIN
+        -- Rollback if needed
+        ROLLBACK;
+
+        -- Retrieve error details
+        GET DIAGNOSTICS CONDITION 1
+            result_code = MYSQL_ERRNO,
+            result_message = MESSAGE_TEXT;
+
+        -- Output general error message and error code
+        SELECT -1 AS result_code, CONCAT('Error: ', result_message) AS Message;
+    END;
+-- ---------------------------------------------------------------------
+    
     -- Validate phone number (starts with 9 or 8)
     IF LEFT(p_phone_number, 1) NOT IN ('9', '8') THEN
-        SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Phone number must start with 9 or 8';
+		SET result_message = 'Phone number must start with 9 or 8';
+        SET result_code = -1;
+        SIGNAL SQLSTATE '45000';
     END IF;
 
     -- Generate a unique employee identifier
@@ -27,5 +49,5 @@ BEGIN
     COMMIT;
 
     -- Log the insert operation (for debugging purposes)
-    SELECT 'Employee inserted successfully' AS message, p_id AS inserted_id;
+    SELECT success_message AS message, p_id AS inserted_id;
 END
