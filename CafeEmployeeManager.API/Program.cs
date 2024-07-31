@@ -4,6 +4,7 @@ using CafeEmployeeManager.API.Repositories;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Microsoft.Extensions.Configuration;
+using CafeEmployeeManager.API.Repositories.Services;
 
 
 var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -35,7 +36,8 @@ try
     // Register repository
     builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
     builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
+    builder.Services.AddScoped<ICafeRepository, CafeRepository>();
+    builder.Services.AddScoped<ICafeService, CafeService>();
 
     var app = builder.Build();
 
