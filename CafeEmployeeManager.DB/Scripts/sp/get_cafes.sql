@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetCafes`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cafes_sp`(
 	IN loc VARCHAR(100)
 )
 BEGIN

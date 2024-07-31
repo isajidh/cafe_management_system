@@ -8,6 +8,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_employee_with_cafe`(
 )
 BEGIN
     DECLARE p_id VARCHAR(10);
+	DECLARE v_cafe_name VARCHAR(255);
+	DECLARE v_days_worked INT;
 
     -- Declare variables for error handling
     DECLARE result_code INT DEFAULT 0;
@@ -29,6 +31,7 @@ BEGIN
         SELECT -1 AS result_code, CONCAT('Error: ', result_message) AS Message;
     END;
 
+-- ---------------------------------------------------------------------
     -- Validate phone number (starts with 9 or 8)
     IF LEFT(p_phone_number, 1) NOT IN ('9', '8') THEN
         SET result_message = 'Phone number must start with 9 or 8';
@@ -40,14 +43,29 @@ BEGIN
         
         -- Generate a unique employee identifier
         SET p_id = CONCAT('UI', SUBSTRING(REPLACE(UUID(), '-', ''), 1, 7));
+-- ------------------------------------------------------------------------------
+	-- Fetch the cafe name by cafe id
+    SELECT name INTO v_cafe_name
+    FROM Cafe
+    WHERE id = p_cafe_id;
 
+    -- Check if cafe name was found
+    IF v_cafe_name IS NULL THEN
+        SET result_code = -1;
+        SET result_message = 'Cafe not found';
+        SIGNAL SQLSTATE '45000';
+    END IF;
+-- --------------------------------------------------------------------------
+    -- Calculate days worked
+    SET v_days_worked = DATEDIFF(CURDATE(), p_start_date);
+    
         -- Insert the new employee
         INSERT INTO Employee (id, name, emailaddress, phonenumber, gender)
         VALUES (p_id, p_name, p_email_address, p_phone_number, p_gender);
 
         -- Insert the relationship
-        INSERT INTO EmployeeCafeRelationship (employeeid, cafeid, startdate)
-        VALUES (p_id, p_cafe_id, p_start_date);
+        INSERT INTO EmployeeCafeRelationship (employeeid, employeename, cafeid, cafename, startdate, daysworked)
+        VALUES (p_id, p_name, p_cafe_id, v_cafe_name, p_start_date, v_days_worked);
         
         -- Commit the transaction
         COMMIT;
