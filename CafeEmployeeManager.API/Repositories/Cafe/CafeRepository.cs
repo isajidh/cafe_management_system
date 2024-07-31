@@ -91,7 +91,39 @@ namespace CafeEmployeeManager.API.Repositories
             }
         }
 
-        public Task<int> UpdateAsync(Cafe entity)
+        public async Task<(int,string)> UpdateAsync(Cafe entity)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    var parameters = new DynamicParameters();
+
+                    // Add parameters
+                    parameters.Add("p_id", entity.Id, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_name", entity.Name, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_description", entity.Description, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_logo", entity.Logo, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_location", entity.Location, DbType.String, ParameterDirection.Input);
+
+                    // Execute the command
+                    var result = await connection.QuerySingleAsync<dynamic>("update_cafe_sp", parameters, commandType: CommandType.StoredProcedure);
+
+                    int result_code = (int)result.result_code;
+                    string result_message = result.result_message;
+
+                    return (result_code, result_message);
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return (-2, ex.Message);
+            }
+        }
+
+        Task<int> IRepository<Cafe>.UpdateAsync(Cafe entity)
         {
             throw new NotImplementedException();
         }

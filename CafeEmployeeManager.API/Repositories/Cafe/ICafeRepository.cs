@@ -7,5 +7,6 @@ namespace CafeEmployeeManager.API.Repositories
     {
         Task<(int, string)> AddAsync(CafeRequestBody entity);
         Task<IEnumerable<Cafe>> GetCafesAsync(string location = null);
+        Task<(int, string)> UpdateAsync(Cafe entity);
     }
 }

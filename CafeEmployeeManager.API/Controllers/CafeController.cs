@@ -44,6 +44,25 @@ namespace CafeEmployeeManager.API.Controllers
             }
         }
 
+        [HttpPut("UpdateCafe")]
+        public async Task<IActionResult> UpdateCafe([FromBody] Cafe request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            (int result_code, string result_message) = await _cafeRepository.UpdateAsync(request);
+
+            if (result_code == 0)
+            {
+                return Ok(result_message);
+            }
+            else
+            {
+                return BadRequest(new { Error = result_message });
+            }
+        }
 
     }
 }
