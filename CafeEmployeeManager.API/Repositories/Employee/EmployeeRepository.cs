@@ -78,7 +78,7 @@ namespace CafeEmployeeManager.API.Repositories
             }
             catch (MySqlException ex)
             {
-                return (-2,ex.Message);
+                return (-2, ex.Message);
             }
         }
 
@@ -102,9 +102,35 @@ namespace CafeEmployeeManager.API.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<(int, string)> UpdateEmployeeWithCafeRelationship(Employee entity)
+        public async Task<(int, string)> UpdateEmployeeWithCafeRelationship(EmployeeCafeRequestBody entity)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    var parameters = new DynamicParameters();
+                    parameters.Add("p_employee_id", entity.EmployeeId, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_name", entity.Name, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_email_address", entity.EmailAddress, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_phone_number", entity.PhoneNumber, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_gender", entity.Gender, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_cafe_id", entity.CafeId, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_start_date", entity.StartDate, DbType.Date, ParameterDirection.Input);
+
+                    var result = await connection.QuerySingleAsync<dynamic>("update_employee_cafe_relationship_sp", parameters, commandType: CommandType.StoredProcedure);
+
+                    int result_code = (int)result.result_code;
+                    string result_message = result.result_message;
+
+                    return (result_code, result_message);
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return (-2, ex.Message);
+            }
+        } 
     }
 }

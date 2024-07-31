@@ -7,6 +7,7 @@ namespace CafeEmployeeManager.API.Repositories
     {
         Task<int> AddAsync(EmployeeRequestBody request);
         Task<(int, string)> AddEmployeeWithCafeRelationship(EmployeeRequestBody request);
+        Task<(int, string)> UpdateEmployeeWithCafeRelationship(EmployeeCafeRequestBody entity);
 
     }
 

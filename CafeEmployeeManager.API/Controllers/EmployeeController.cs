@@ -85,6 +85,25 @@ namespace CafeEmployeeManager.API.Controllers
             return Ok(employee);
         }
 
+
+        // PUT api/employee/
+        [HttpPut("UpdateEmployeeWithCafe")]
+        public async Task<ActionResult<Employee>> UpdateEmployeeWithCafeRelationship(EmployeeCafeRequestBody request)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            (int resultCode, string result_message) = await _employeeRepository.UpdateEmployeeWithCafeRelationship(request);
+
+            if (resultCode == 0)
+            {
+                return Ok(result_message);
+            }
+            else
+            {
+                return BadRequest(new { Error = result_message });
+            }
+        }
+
         // DELETE api/employee/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteEmployee(int id)
