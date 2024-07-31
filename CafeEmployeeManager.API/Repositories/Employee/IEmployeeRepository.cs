@@ -5,6 +5,7 @@ namespace CafeEmployeeManager.API.Repositories
 {
     public interface IEmployeeRepository : IRepository<Employee>
     {
+        Task<int> AddAsync(EmployeeRequestBody request);
         Task<(int, string)> AddEmployeeWithCafeRelationship(EmployeeRequestBody request);
 
     }

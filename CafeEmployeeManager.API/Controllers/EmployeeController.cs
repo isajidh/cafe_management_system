@@ -38,30 +38,18 @@ namespace CafeEmployeeManager.API.Controllers
             return Ok();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateEmployee([FromBody] EmployeeRequestBody request)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        [HttpPost("createEmployee")]
+        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeRequestBody request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    var employee = new Employee
-        //    {
-        //        Name = request.Name,
-        //        EmailAddress = request.EmailAddress,
-        //        PhoneNumber = request.PhoneNumber,
-        //        Gender = request.Gender
-        //    };
+            var result = await _employeeRepository.AddAsync(request);
 
-
-        //    var result = await _employeeRepository.AddAsync(employee);
-
-
-        //    return Ok(result);
-        //    //return CreatedAtAction(nameof(GetEmployeeById), new { id = employee.Id }, employee);
-        //}
-
+            return Ok(result);
+        }
 
         [HttpPost]
         //4
@@ -82,7 +70,6 @@ namespace CafeEmployeeManager.API.Controllers
                 return BadRequest(new { Error = result_message });
             }
         }
-
 
         // PUT api/employee/5
         [HttpPut("{id}")]

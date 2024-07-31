@@ -21,7 +21,7 @@ namespace CafeEmployeeManager.API.Repositories
             _connectionString = _config.GetConnectionString("mySqlConnectionString");
         }
 
-        public async Task<int> AddAsync(Employee entity)
+        public async Task<int> AddAsync(EmployeeRequestBody request)
         {
 
             using (var connection = new MySqlConnection(_connectionString))
@@ -33,10 +33,10 @@ namespace CafeEmployeeManager.API.Repositories
                     command.CommandType = CommandType.StoredProcedure;
 
                     // Add parameters to the command
-                    command.Parameters.AddWithValue("p_name", entity.Name);
-                    command.Parameters.AddWithValue("p_email_address", entity.EmailAddress);
-                    command.Parameters.AddWithValue("p_phone_number", entity.PhoneNumber);
-                    command.Parameters.AddWithValue("p_gender", entity.Gender);
+                    command.Parameters.AddWithValue("p_name", request.Name);
+                    command.Parameters.AddWithValue("p_email_address", request.EmailAddress);
+                    command.Parameters.AddWithValue("p_phone_number", request.PhoneNumber);
+                    command.Parameters.AddWithValue("p_gender", request.Gender);
 
 
                     // Execute the stored procedure
@@ -45,6 +45,11 @@ namespace CafeEmployeeManager.API.Repositories
                 }
             }
 
+        }
+
+        public Task<int> AddAsync(Employee entity)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<(int, string)> AddEmployeeWithCafeRelationship(EmployeeRequestBody request)
@@ -65,7 +70,6 @@ namespace CafeEmployeeManager.API.Repositories
 
                     var result = await connection.QuerySingleAsync<dynamic>("add_employee_with_cafe", parameters, commandType: CommandType.StoredProcedure);
 
-                    // Assuming the stored procedure returns error_code and Message
                     int result_code = (int)result.result_code;
                     string result_message = result.Message;
 

@@ -40,8 +40,8 @@ BEGIN
     COMMIT;
 
         SET result_code = 0;
-        SET result_message = 'Cafe created successfully';
+        SET result_message = CONCAT(p_name, ' cafe created successfully');
 		-- Log the insert operation (for debugging purposes)
-		SELECT result_message AS message, v_uuid AS inserted_id;
+		SELECT result_code AS result_code, result_message AS result_message;
 
 END
