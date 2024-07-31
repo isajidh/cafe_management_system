@@ -101,5 +101,10 @@ namespace CafeEmployeeManager.API.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public Task<(int, string)> UpdateEmployeeWithCafeRelationship(Employee entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

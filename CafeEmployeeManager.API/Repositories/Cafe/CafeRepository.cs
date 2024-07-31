@@ -1,5 +1,4 @@
-﻿
-using CafeEmployeeManager.API.Data;
+﻿using CafeEmployeeManager.API.Data;
 using CafeEmployeeManager.API.Model;
 using CafeEmployeeManager.API.Model.Request_Body;
 using Dapper;
