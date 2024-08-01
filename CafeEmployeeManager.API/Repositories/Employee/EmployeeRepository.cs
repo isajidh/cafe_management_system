@@ -5,6 +5,8 @@ using CafeEmployeeManager.API.Data;
 using MySqlConnector;
 using Dapper;
 using CafeEmployeeManager.API.Model.Request_Body;
+using System.Threading.Tasks;
+
 
 namespace CafeEmployeeManager.API.Repositories
 {
@@ -21,7 +23,7 @@ namespace CafeEmployeeManager.API.Repositories
             _connectionString = _config.GetConnectionString("mySqlConnectionString");
         }
 
-        public async Task<int> AddAsync(Employee entity)
+        public async Task<int> AddAsync(EmployeeRequestBody request)
         {
 
             using (var connection = new MySqlConnection(_connectionString))
@@ -33,10 +35,10 @@ namespace CafeEmployeeManager.API.Repositories
                     command.CommandType = CommandType.StoredProcedure;
 
                     // Add parameters to the command
-                    command.Parameters.AddWithValue("p_name", entity.Name);
-                    command.Parameters.AddWithValue("p_email_address", entity.EmailAddress);
-                    command.Parameters.AddWithValue("p_phone_number", entity.PhoneNumber);
-                    command.Parameters.AddWithValue("p_gender", entity.Gender);
+                    command.Parameters.AddWithValue("p_name", request.Name);
+                    command.Parameters.AddWithValue("p_email_address", request.EmailAddress);
+                    command.Parameters.AddWithValue("p_phone_number", request.PhoneNumber);
+                    command.Parameters.AddWithValue("p_gender", request.Gender);
 
 
                     // Execute the stored procedure
@@ -45,6 +47,11 @@ namespace CafeEmployeeManager.API.Repositories
                 }
             }
 
+        }
+
+        public Task<int> AddAsync(Employee entity)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<(int, string)> AddEmployeeWithCafeRelationship(EmployeeRequestBody request)
@@ -63,9 +70,8 @@ namespace CafeEmployeeManager.API.Repositories
                     parameters.Add("p_cafe_id", request.CafeId, DbType.String, ParameterDirection.Input);
                     parameters.Add("p_start_date", request.StartDate, DbType.Date, ParameterDirection.Input);
 
-                    var result = await connection.QuerySingleAsync<dynamic>("add_employee_with_cafe", parameters, commandType: CommandType.StoredProcedure);
+                    var result = await connection.QuerySingleAsync<dynamic>("add_employee_with_cafe_sp", parameters, commandType: CommandType.StoredProcedure);
 
-                    // Assuming the stored procedure returns error_code and Message
                     int result_code = (int)result.result_code;
                     string result_message = result.Message;
 
@@ -74,7 +80,43 @@ namespace CafeEmployeeManager.API.Repositories
             }
             catch (MySqlException ex)
             {
-                return (-2,ex.Message);
+                return (-2, ex.Message);
+            }
+        }
+
+        public async Task<(int, string)> DeleteAsync(string id)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    var parameters = new DynamicParameters();
+                    parameters.Add("p_employee_id", id, DbType.String, ParameterDirection.Input);
+
+                    // Execute the stored procedure and read the output
+                    var result = await connection.QueryFirstOrDefaultAsync<dynamic>("delete_employee_sp", parameters, commandType: CommandType.StoredProcedure);
+
+                    if (result != null)
+                    {
+                        int resultCode = result.result_code;
+                        string resultMessage = result.result_message;
+                        return (resultCode, resultMessage);
+                    }
+                    else
+                    {
+                        return (-1, "An unknown error occurred.");
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return (-2, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return (-1, $"Error: {ex.Message}");
             }
         }
 
@@ -97,5 +139,36 @@ namespace CafeEmployeeManager.API.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<(int, string)> UpdateEmployeeWithCafeRelationship(EmployeeCafeRequestBody entity)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    var parameters = new DynamicParameters();
+                    parameters.Add("p_employee_id", entity.EmployeeId, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_name", entity.Name, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_email_address", entity.EmailAddress, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_phone_number", entity.PhoneNumber, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_gender", entity.Gender, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_cafe_id", entity.CafeId, DbType.String, ParameterDirection.Input);
+                    parameters.Add("p_start_date", entity.StartDate, DbType.Date, ParameterDirection.Input);
+
+                    var result = await connection.QuerySingleAsync<dynamic>("update_employee_cafe_relationship_sp", parameters, commandType: CommandType.StoredProcedure);
+
+                    int result_code = (int)result.result_code;
+                    string result_message = result.result_message;
+
+                    return (result_code, result_message);
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return (-2, ex.Message);
+            }
+        } 
     }
 }

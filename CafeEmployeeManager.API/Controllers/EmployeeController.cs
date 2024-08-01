@@ -38,30 +38,18 @@ namespace CafeEmployeeManager.API.Controllers
             return Ok();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateEmployee([FromBody] EmployeeRequestBody request)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        [HttpPost("createEmployeeOnly")]
+        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeRequestBody request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    var employee = new Employee
-        //    {
-        //        Name = request.Name,
-        //        EmailAddress = request.EmailAddress,
-        //        PhoneNumber = request.PhoneNumber,
-        //        Gender = request.Gender
-        //    };
+            var result = await _employeeRepository.AddAsync(request);
 
-
-        //    var result = await _employeeRepository.AddAsync(employee);
-
-
-        //    return Ok(result);
-        //    //return CreatedAtAction(nameof(GetEmployeeById), new { id = employee.Id }, employee);
-        //}
-
+            return Ok(result);
+        }
 
         [HttpPost]
         //4
@@ -83,7 +71,6 @@ namespace CafeEmployeeManager.API.Controllers
             }
         }
 
-
         // PUT api/employee/5
         [HttpPut("{id}")]
         public async Task<ActionResult<Employee>> UpdateEmployee(string id, Employee employee)
@@ -98,19 +85,41 @@ namespace CafeEmployeeManager.API.Controllers
             return Ok(employee);
         }
 
+
+        // PUT api/employee/
+        [HttpPut("UpdateEmployeeWithCafe")]
+        public async Task<ActionResult<Employee>> UpdateEmployeeWithCafeRelationship(EmployeeCafeRequestBody request)
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            (int resultCode, string result_message) = await _employeeRepository.UpdateEmployeeWithCafeRelationship(request);
+
+            if (resultCode == 0)
+            {
+                return Ok(result_message);
+            }
+            else
+            {
+                return BadRequest(new { Error = result_message });
+            }
+        }
+
         // DELETE api/employee/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteEmployee(int id)
+        public async Task<ActionResult> DeleteEmployee(string id)
         {
-            //var employee = await _dbContext.Employees.FindAsync(id);
-            //if (employee == null)
-            //{
-            //    return NotFound();
-            //}
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            //_dbContext.Employees.Remove(employee);
-            //await _dbContext.SaveChangesAsync();
-            return NoContent();
+            (int resultCode, string result_message) = await _employeeRepository.DeleteAsync(id);
+
+            if (resultCode == 0)
+            {
+                return Ok(result_message);
+            }
+            else
+            {
+                return BadRequest(new { Error = result_message });
+            }
         }
     }
 }
