@@ -5,6 +5,8 @@ using CafeEmployeeManager.API.Data;
 using MySqlConnector;
 using Dapper;
 using CafeEmployeeManager.API.Model.Request_Body;
+using System.Threading.Tasks;
+
 
 namespace CafeEmployeeManager.API.Repositories
 {
@@ -68,7 +70,7 @@ namespace CafeEmployeeManager.API.Repositories
                     parameters.Add("p_cafe_id", request.CafeId, DbType.String, ParameterDirection.Input);
                     parameters.Add("p_start_date", request.StartDate, DbType.Date, ParameterDirection.Input);
 
-                    var result = await connection.QuerySingleAsync<dynamic>("add_employee_with_cafe", parameters, commandType: CommandType.StoredProcedure);
+                    var result = await connection.QuerySingleAsync<dynamic>("add_employee_with_cafe_sp", parameters, commandType: CommandType.StoredProcedure);
 
                     int result_code = (int)result.result_code;
                     string result_message = result.Message;
@@ -79,6 +81,42 @@ namespace CafeEmployeeManager.API.Repositories
             catch (MySqlException ex)
             {
                 return (-2, ex.Message);
+            }
+        }
+
+        public async Task<(int, string)> DeleteAsync(string id)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    var parameters = new DynamicParameters();
+                    parameters.Add("p_employee_id", id, DbType.String, ParameterDirection.Input);
+
+                    // Execute the stored procedure and read the output
+                    var result = await connection.QueryFirstOrDefaultAsync<dynamic>("delete_employee_sp", parameters, commandType: CommandType.StoredProcedure);
+
+                    if (result != null)
+                    {
+                        int resultCode = result.result_code;
+                        string resultMessage = result.result_message;
+                        return (resultCode, resultMessage);
+                    }
+                    else
+                    {
+                        return (-1, "An unknown error occurred.");
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return (-2, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return (-1, $"Error: {ex.Message}");
             }
         }
 

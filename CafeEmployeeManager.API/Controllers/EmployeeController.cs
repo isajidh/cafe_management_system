@@ -38,7 +38,7 @@ namespace CafeEmployeeManager.API.Controllers
             return Ok();
         }
 
-        [HttpPost("createEmployee")]
+        [HttpPost("createEmployeeOnly")]
         public async Task<IActionResult> CreateEmployee([FromBody] EmployeeRequestBody request)
         {
             if (!ModelState.IsValid)
@@ -106,17 +106,20 @@ namespace CafeEmployeeManager.API.Controllers
 
         // DELETE api/employee/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteEmployee(int id)
+        public async Task<ActionResult> DeleteEmployee(string id)
         {
-            //var employee = await _dbContext.Employees.FindAsync(id);
-            //if (employee == null)
-            //{
-            //    return NotFound();
-            //}
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            //_dbContext.Employees.Remove(employee);
-            //await _dbContext.SaveChangesAsync();
-            return NoContent();
+            (int resultCode, string result_message) = await _employeeRepository.DeleteAsync(id);
+
+            if (resultCode == 0)
+            {
+                return Ok(result_message);
+            }
+            else
+            {
+                return BadRequest(new { Error = result_message });
+            }
         }
     }
 }

@@ -15,8 +15,7 @@ BEGIN
     -- Declare variables for error handling
     DECLARE result_code INT DEFAULT 0;
     DECLARE result_message TEXT DEFAULT '';
-    DECLARE success_message VARCHAR(255) DEFAULT 'Procedure executed successfully.';
-
+    
     -- Declare the exit handler for SQL exceptions
     DECLARE exit handler FOR SQLEXCEPTION
     BEGIN
@@ -71,6 +70,7 @@ BEGIN
         COMMIT;
 
         -- Output success message
-        SELECT 0 AS result_code, success_message AS Message;
+		SET result_message = CONCAT('Employee ', p_name, ' created successfully');
+        SELECT 0 AS result_code, result_message AS Message;
     END IF;
 END
