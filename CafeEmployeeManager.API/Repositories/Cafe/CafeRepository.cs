@@ -5,6 +5,7 @@ using Dapper;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using System.Data;
+using static Dapper.SqlMapper;
 
 namespace CafeEmployeeManager.API.Repositories
 {
@@ -58,9 +59,33 @@ namespace CafeEmployeeManager.API.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<int> DeleteAsync(int id)
+        public async Task<(int,string)> DeleteAsync(string id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    var parameters = new DynamicParameters();
+
+                    // Add parameters
+                    parameters.Add("p_cafe_id", id, DbType.String, ParameterDirection.Input);
+
+                    // Execute the command
+                    var result = await connection.QuerySingleAsync<dynamic>("delete_cafe_and_employees_sp", parameters, commandType: CommandType.StoredProcedure);
+
+                    int result_code = (int)result.result_code;
+                    string result_message = result.result_message;
+
+                    return (result_code, result_message);
+
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return (-2, ex.Message);
+            }
         }
 
         public Task<IEnumerable<Cafe>> GetAllAsync()
@@ -120,6 +145,11 @@ namespace CafeEmployeeManager.API.Repositories
             {
                 return (-2, ex.Message);
             }
+        }
+
+        Task<int> IRepository<Cafe>.DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
         }
 
         Task<int> IRepository<Cafe>.UpdateAsync(Cafe entity)

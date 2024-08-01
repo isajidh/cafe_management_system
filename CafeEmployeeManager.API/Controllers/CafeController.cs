@@ -64,5 +64,25 @@ namespace CafeEmployeeManager.API.Controllers
             }
         }
 
+        [HttpDelete("DeleteCafe")] //test delete
+        public async Task<IActionResult> DeleteAsync([FromQuery] string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            (int result_code, string result_message) = await _cafeRepository.DeleteAsync(id);
+
+            if (result_code == 0)
+            {
+                return Ok(result_message);
+            }
+            else
+            {
+                return BadRequest(new { Error = result_message });
+            }
+        }
+
     }
 }
