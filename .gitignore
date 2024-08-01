@@ -2,6 +2,4 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/CafeEmployeeManager.API/.vs/CafeEmployeeManager.API/FileContentIndex
-/CafeEmployeeManager.API/.vs/CafeEmployeeManager.API/v17
-/CafeEmployeeManager.API/.vs/CafeEmployeeManager.API
+*/.vs/
