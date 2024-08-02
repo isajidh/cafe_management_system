@@ -5,6 +5,7 @@ using CafeEmployeeManager.API.Data;
 using CafeEmployeeManager.API.Model;
 using CafeEmployeeManager.API.Repositories;
 using CafeEmployeeManager.API.Model.Request_Body;
+using static Google.Protobuf.Reflection.SourceCodeInfo.Types;
 
 namespace CafeEmployeeManager.API.Controllers
 {
@@ -121,5 +122,14 @@ namespace CafeEmployeeManager.API.Controllers
                 return BadRequest(new { Error = result_message });
             }
         }
+
+        // GET api/getEmployeesWithCafe
+        [HttpGet("GetAllEmployeesWithCafe")]
+        public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployeesWithCafe([FromQuery] string cafe = null)
+        {
+            var cafes = await _employeeRepository.GetEmployeesByCafeAsync(cafe);
+            return Ok(cafes);
+        }
+
     }
 }

@@ -58,7 +58,7 @@ const Cafes = () => {
     {
       headerName: "Actions",
       field: "id",
-      cellRendererFramework: (params) => (
+      cellRenderer: (params) => (
         <>
           <Button
             variant="contained"

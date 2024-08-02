@@ -9,6 +9,7 @@ namespace CafeEmployeeManager.API.Repositories
         Task<(int, string)> AddEmployeeWithCafeRelationship(EmployeeRequestBody request);
         Task<(int, string)> UpdateEmployeeWithCafeRelationship(EmployeeCafeRequestBody entity);
         Task<(int, string)> DeleteAsync(string id);
+        Task<IEnumerable<EmployeeCafe>> GetEmployeesByCafeAsync(string cafeId);
 
     }
 

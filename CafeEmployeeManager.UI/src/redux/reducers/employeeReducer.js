@@ -1,6 +1,10 @@
+import { FETCH_EMPLOYEES_WITH_CAFE_SUCCESS } from "../actions/types";
+import { FETCH_EMPLOYEES_WITH_CAFE_FAILURE } from "../actions/types";
+import { FETCH_EMPLOYEES_WITH_CAFE_REQUEST } from "../actions/types";
 import {
   FETCH_EMPLOYEES_REQUEST,
   FETCH_EMPLOYEES_SUCCESS,
+  FETCH_EMPLOYEES_FAILURE,
 } from "../actions/types";
 
 const initialState = {
@@ -21,6 +25,30 @@ const employeeReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         items: action.payload,
+      };
+    case FETCH_EMPLOYEES_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    case FETCH_EMPLOYEES_WITH_CAFE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_EMPLOYEES_WITH_CAFE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        employees: action.payload,
+      };
+    case FETCH_EMPLOYEES_WITH_CAFE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
     default:
       return state;
