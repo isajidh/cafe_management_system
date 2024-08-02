@@ -7,7 +7,7 @@ const NavBar = () => {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
-          Café Employee Manager
+          Cafe Employee Manager
         </Typography>
         <Button color="inherit" component={Link} to="/cafes">
           Cafes

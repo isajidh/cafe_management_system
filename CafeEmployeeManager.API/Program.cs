@@ -36,6 +36,21 @@ try
     builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
     builder.Services.AddScoped<ICafeRepository, CafeRepository>();
 
+    // Add CORS services
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowSpecificOrigin",
+            builder =>
+            {
+                builder.WithOrigins("http://localhost:3000") // Specify the client URL
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
+            });
+    });
+
+
+
+
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
@@ -47,6 +62,9 @@ try
 
     app.UseHttpsRedirection();
     app.UseRouting();
+
+    app.UseCors("AllowSpecificOrigin"); // Use the CORS policy
+
     app.UseAuthorization();
 
     app.MapControllers();
