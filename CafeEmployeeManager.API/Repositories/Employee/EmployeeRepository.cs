@@ -68,7 +68,7 @@ namespace CafeEmployeeManager.API.Repositories
                     parameters.Add("p_phone_number", request.PhoneNumber, DbType.String, ParameterDirection.Input);
                     parameters.Add("p_gender", request.Gender, DbType.String, ParameterDirection.Input);
                     parameters.Add("p_cafe_id", request.CafeId, DbType.String, ParameterDirection.Input);
-                    parameters.Add("p_start_date", request.StartDate, DbType.Date, ParameterDirection.Input);
+                    parameters.Add("p_start_date", request.StartDate.Date, DbType.Date, ParameterDirection.Input);
 
                     var result = await connection.QuerySingleAsync<dynamic>("add_employee_with_cafe_sp", parameters, commandType: CommandType.StoredProcedure);
 

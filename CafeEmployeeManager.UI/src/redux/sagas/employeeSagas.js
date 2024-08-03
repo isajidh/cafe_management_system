@@ -6,7 +6,9 @@ import {
 } from "../actions/employeeActions";
 import employeeService from "../../api/employeeService";
 import {
-  FETCH_EMPLOYEES_REQUEST,
+  ADD_EMPLOYEE_FAILURE,
+  ADD_EMPLOYEE_REQUEST,
+  ADD_EMPLOYEE_SUCCESS,
   FETCH_EMPLOYEES_WITH_CAFE_REQUEST,
 } from "../actions/types";
 
@@ -30,9 +32,22 @@ function* fetchEmployeesWithCafeSaga(action) {
     yield put(fetchEmployeesWithCafeFailure(error.message));
   }
 }
+
+function* createEmployeeSaga(action) {
+  try {
+    const newCafe = yield call(employeeService.createEmployee, action.payload);
+    yield put({ type: ADD_EMPLOYEE_SUCCESS, payload: newCafe });
+    // Fetch cafes again to update the list after adding new cafe
+    yield put({ type: ADD_EMPLOYEE_REQUEST });
+  } catch (error) {
+    yield put({ type: ADD_EMPLOYEE_FAILURE, payload: error.message });
+  }
+}
+
 export function* watchFetchEmployees() {
   yield takeLatest(
     FETCH_EMPLOYEES_WITH_CAFE_REQUEST,
     fetchEmployeesWithCafeSaga
   );
+  yield takeLatest(ADD_EMPLOYEE_REQUEST, createEmployeeSaga);
 }

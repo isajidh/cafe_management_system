@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CafeFormModal = ({ open, onClose }) => {
+const AddCafeModal = ({ open, onClose }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [formValues, setFormValues] = useState({
@@ -116,4 +116,4 @@ const CafeFormModal = ({ open, onClose }) => {
   );
 };
 
-export default CafeFormModal;
+export default AddCafeModal;

@@ -1,4 +1,7 @@
 import { FETCH_EMPLOYEES_WITH_CAFE_SUCCESS } from "../actions/types";
+import { ADD_EMPLOYEE_REQUEST } from "../actions/types";
+import { ADD_EMPLOYEE_FAILURE } from "../actions/types";
+import { ADD_EMPLOYEE_SUCCESS } from "../actions/types";
 import { FETCH_EMPLOYEES_WITH_CAFE_FAILURE } from "../actions/types";
 import { FETCH_EMPLOYEES_WITH_CAFE_REQUEST } from "../actions/types";
 import {
@@ -50,6 +53,28 @@ const employeeReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+
+    case ADD_EMPLOYEE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+
+    case ADD_EMPLOYEE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        employees: [...state.employees, action.payload],
+      };
+
+    case ADD_EMPLOYEE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
     default:
       return state;
   }

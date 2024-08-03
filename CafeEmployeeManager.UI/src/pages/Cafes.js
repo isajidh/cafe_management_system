@@ -6,7 +6,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import { fetchCafes } from "../redux/actions/cafeActions";
 import { Container, Typography, TextField, Button } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
-import CafeFormModal from "../components/Cafe/CafeFormModal";
+import AddCafeModal from "../components/Cafe/AddCafeModal";
 import { useCafe } from "../components/CafeContext";
 
 const Cafes = () => {
@@ -112,7 +112,7 @@ const Cafes = () => {
       >
         Add New Cafe
       </Button>
-      <CafeFormModal
+      <AddCafeModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={handleAddCafe}

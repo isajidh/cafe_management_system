@@ -12,15 +12,14 @@ const Employees = () => {
   const dispatch = useDispatch();
   const { employees, loading, error } = useSelector((state) => state.employees);
   const [showModal, setShowModal] = useState(false);
-  const { cafeID, setCafeID } = useCafe();
+  const { cafeID } = useCafe();
 
   useEffect(() => {
     if (cafeID) {
       dispatch(fetchEmployeesWithCafe(cafeID));
-    } else {
-      dispatch(fetchEmployeesWithCafe(""));
     }
-  }, [cafeID, setCafeID, dispatch]);
+    dispatch(fetchEmployeesWithCafe(""));
+  }, [cafeID, dispatch]);
 
   const columns = [
     { headerName: "Employee ID", field: "employeeId" },
