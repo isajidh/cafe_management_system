@@ -3,6 +3,8 @@ import {
   fetchEmployeesSuccess,
   fetchEmployeesWithCafeFailure,
   fetchEmployeesWithCafeSuccess,
+  updateEmployeeFailure,
+  updateEmployeeSuccess,
 } from "../actions/employeeActions";
 import employeeService from "../../api/employeeService";
 import {
@@ -10,6 +12,7 @@ import {
   ADD_EMPLOYEE_REQUEST,
   ADD_EMPLOYEE_SUCCESS,
   FETCH_EMPLOYEES_WITH_CAFE_REQUEST,
+  UPDATE_EMPLOYEE_REQUEST,
 } from "../actions/types";
 
 function* fetchEmployeesSaga() {
@@ -44,10 +47,21 @@ function* createEmployeeSaga(action) {
   }
 }
 
+function* updateEmployeeSaga(action) {
+  try {
+    const response = yield call(employeeService.updateEmployee, action.payload);
+    yield put(updateEmployeeSuccess(response.data));
+    yield put(fetchEmployeesSuccess()); // Refetch employees to update the list
+  } catch (error) {
+    yield put(updateEmployeeFailure(error.message));
+  }
+}
+
 export function* watchFetchEmployees() {
   yield takeLatest(
     FETCH_EMPLOYEES_WITH_CAFE_REQUEST,
     fetchEmployeesWithCafeSaga
   );
   yield takeLatest(ADD_EMPLOYEE_REQUEST, createEmployeeSaga);
+  yield takeLatest(UPDATE_EMPLOYEE_REQUEST, updateEmployeeSaga);
 }

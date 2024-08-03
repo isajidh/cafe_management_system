@@ -8,6 +8,9 @@ import {
   ADD_EMPLOYEE_REQUEST,
   ADD_EMPLOYEE_SUCCESS,
   ADD_EMPLOYEE_FAILURE,
+  UPDATE_EMPLOYEE_REQUEST,
+  UPDATE_EMPLOYEE_SUCCESS,
+  UPDATE_EMPLOYEE_FAILURE,
 } from "./types";
 
 export const fetchEmployees = () => ({
@@ -53,5 +56,20 @@ export const addEmployeeSuccess = (employee) => ({
 
 export const addEmployeeFailure = (error) => ({
   type: ADD_EMPLOYEE_FAILURE,
+  payload: error,
+});
+
+export const updateEmployeeRequest = (employeeData) => ({
+  type: UPDATE_EMPLOYEE_REQUEST,
+  payload: employeeData,
+});
+
+export const updateEmployeeSuccess = (employee) => ({
+  type: UPDATE_EMPLOYEE_SUCCESS,
+  payload: employee,
+});
+
+export const updateEmployeeFailure = (error) => ({
+  type: UPDATE_EMPLOYEE_FAILURE,
   payload: error,
 });

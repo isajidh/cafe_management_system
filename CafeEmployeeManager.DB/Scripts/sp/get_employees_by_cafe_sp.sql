@@ -2,7 +2,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_employees_by_cafe_sp`(
     IN cafeId VARCHAR(36)
 )
 BEGIN
-    SELECT e.id, e.name, e.emailAddress, e.phoneNumber, e.gender, 
+    SELECT e.id, e.name, e.gender, e.emailAddress, e.phoneNumber, e.gender, 
            ec.startDate, c.id AS cafeId, c.name AS cafeName,
            DATEDIFF(CURDATE(), ec.startDate) AS daysWorked
     FROM employee e

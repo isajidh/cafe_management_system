@@ -7,6 +7,7 @@ public partial class EmployeeCafe
 {
     public string EmployeeId { get; set; } = null!;
     public string EmployeeName { get; set; } = null!;
+    public string Gender { get; set; }
     public string EmailAddress { get; set; } = null!;
     public string PhoneNumber { get; set; } = null!;
     public string CafeId { get; set; } = null!;

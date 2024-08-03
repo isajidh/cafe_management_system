@@ -155,7 +155,6 @@ namespace CafeEmployeeManager.API.Repositories
                     parameters.Add("p_phone_number", entity.PhoneNumber, DbType.String, ParameterDirection.Input);
                     parameters.Add("p_gender", entity.Gender, DbType.String, ParameterDirection.Input);
                     parameters.Add("p_cafe_id", entity.CafeId, DbType.String, ParameterDirection.Input);
-                    parameters.Add("p_start_date", entity.StartDate, DbType.Date, ParameterDirection.Input);
 
                     var result = await connection.QuerySingleAsync<dynamic>("update_employee_cafe_relationship_sp", parameters, commandType: CommandType.StoredProcedure);
 
@@ -192,6 +191,7 @@ namespace CafeEmployeeManager.API.Repositories
                             {
                                 EmployeeId = reader.GetString("id"),
                                 EmployeeName = reader.GetString("name"),
+                                Gender = reader.GetString("gender"),
                                 EmailAddress = reader.GetString("emailAddress"),
                                 PhoneNumber = reader.GetString("phoneNumber"),
                                 CafeId = reader.GetString("cafeId"),

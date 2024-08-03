@@ -4,14 +4,17 @@ import { fetchEmployeesWithCafe } from "../redux/actions/employeeActions";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import { Button } from "@material-ui/core";
+import { Button, Container, Typography } from "@material-ui/core";
 import AddEmployeeModal from "../components/Employee/AddEmployeeModal";
 import { useCafe } from "../components/CafeContext";
+import EditEmployeeModal from "../components/Employee/EditEmployeeModal";
 
 const Employees = () => {
   const dispatch = useDispatch();
   const { employees, loading, error } = useSelector((state) => state.employees);
-  const [showModal, setShowModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedEmployee, setSelectedEmploye] = useState(null);
   const { cafeID } = useCafe();
 
   useEffect(() => {
@@ -53,7 +56,8 @@ const Employees = () => {
   ];
 
   const handleEdit = (employee) => {
-    // Implement edit functionality
+    setSelectedEmploye(employee);
+    setShowEditModal(true);
   };
 
   const handleDelete = (employeeId) => {
@@ -61,24 +65,40 @@ const Employees = () => {
   };
 
   return (
-    <div className="ag-theme-alpine" style={{ height: 600, width: "100%" }}>
-      <h2>Employees</h2>
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Employees
+      </Typography>
       <Button
         variant="contained"
         color="primary"
-        onClick={() => setShowModal(true)}
+        onClick={() => setShowAddModal(true)}
       >
         Add New Employee
       </Button>
-      <AgGridReact
-        rowData={employees}
-        columnDefs={columns}
-        pagination={true}
-        paginationPageSize={10}
-        domLayout="autoHeight"
+      <AddEmployeeModal
+        open={showAddModal}
+        onClose={() => setShowAddModal(false)}
       />
-      <AddEmployeeModal open={showModal} onClose={() => setShowModal(false)} />
-    </div>
+      <div
+        className="ag-theme-alpine"
+        style={{ height: 400, width: "100%", marginTop: "20px" }}
+      >
+        <AgGridReact
+          rowData={employees}
+          columnDefs={columns}
+          pagination={true}
+          paginationPageSize={10}
+          domLayout="autoHeight"
+        />
+      </div>
+      <EditEmployeeModal
+        open={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        selectedEmployee={selectedEmployee}
+        onSubmit={handleEdit}
+      />
+    </Container>
   );
 };
 

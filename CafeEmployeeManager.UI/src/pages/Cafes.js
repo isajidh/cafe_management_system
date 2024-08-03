@@ -89,10 +89,7 @@ const Cafes = () => {
 
   const handleEditCafe = (cafe) => {
     setSelectedCafe(cafe);
-
     setModalEditOpen(true);
-    // Add logic for editing a cafe
-    console.log("Edit button clicked", cafe);
   };
 
   const handleDelete = (id) => {
@@ -125,12 +122,6 @@ const Cafes = () => {
         onClose={() => setModalAddOpen(false)}
         onSubmit={handleAddCafe}
       />
-      <EditCafeModal
-        open={modalEditOpen}
-        onClose={() => setModalEditOpen(false)}
-        onSubmit={handleEditCafe}
-        cafe={selectedCafe}
-      />
       <div
         className="ag-theme-alpine"
         style={{ height: 400, width: "100%", marginTop: "20px" }}
@@ -146,6 +137,12 @@ const Cafes = () => {
           }}
         />
       </div>
+      <EditCafeModal
+        open={modalEditOpen}
+        onClose={() => setModalEditOpen(false)}
+        onSubmit={handleEditCafe}
+        cafe={selectedCafe}
+      />
     </Container>
   );
 };

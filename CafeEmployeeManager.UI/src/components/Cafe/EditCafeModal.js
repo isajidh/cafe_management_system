@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { updateCafe } from "../../redux/actions/cafeActions";
 import { makeStyles } from "@material-ui/core/styles";
 import MyTextBox from "../common/MyTextBox";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
   formField: {
@@ -83,52 +84,54 @@ const EditCafeModal = ({ open, onClose, cafe }) => {
   return (
     <Modal open={open} onClose={handleClose}>
       <Box component="form" onSubmit={handleSubmit} sx={{ ...modalStyle }}>
-        <h2>Edit Café</h2>
-        <MyTextBox
-          label="Name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          error={formData.name.length < 6 || formData.name.length > 10}
-          helperText="Name must be between 6 and 10 characters."
-          inputProps={{ minLength: 6, maxLength: 10 }}
-        />
-        <MyTextBox
-          label="Description"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          error={formData.description.length > 256}
-          helperText="Description must be less than 256 characters."
-          inputProps={{ maxLength: 256 }}
-        />
-        <Button
-          variant="contained"
-          component="label"
-          className={classes.fileInput}
-        >
-          Upload Logo
-          <input type="file" hidden onChange={handleFileChange} />
-        </Button>
-        <MyTextBox
-          label="Location"
-          name="location"
-          value={formData.location}
-          onChange={handleChange}
-        />
-        <Box mt={2}>
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
+        <div className={classes.modalContent}>
+          <Typography>Edit Café</Typography>
+          <MyTextBox
+            label="Name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            error={formData.name.length < 6 || formData.name.length > 10}
+            helperText="Name must be between 6 and 10 characters."
+            inputProps={{ minLength: 6, maxLength: 10 }}
+          />
+          <MyTextBox
+            label="Description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            error={formData.description.length > 256}
+            helperText="Description must be less than 256 characters."
+            inputProps={{ maxLength: 256 }}
+          />
           <Button
-            onClick={handleClose}
-            variant="outlined"
-            color="secondary"
-            sx={{ ml: 2 }}
+            variant="contained"
+            component="label"
+            className={classes.fileInput}
           >
-            Cancel
+            Upload Logo
+            <input type="file" hidden onChange={handleFileChange} />
           </Button>
-        </Box>
+          <MyTextBox
+            label="Location"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+          />
+          <Box mt={2}>
+            <Button type="submit" variant="contained" color="primary">
+              Submit
+            </Button>
+            <Button
+              onClick={handleClose}
+              variant="outlined"
+              color="secondary"
+              sx={{ ml: 2 }}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </div>
       </Box>
     </Modal>
   );

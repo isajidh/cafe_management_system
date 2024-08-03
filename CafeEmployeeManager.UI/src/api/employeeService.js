@@ -13,6 +13,13 @@ const employeeService = {
     const response = await axios.post(`${API_URL}`, employee);
     return response.data;
   },
+  updateEmployee: async (employee) => {
+    const response = await axios.put(
+      `${API_URL}/UpdateEmployeeWithCafe`,
+      employee
+    );
+    return response.data;
+  },
 };
 
 export default employeeService;
