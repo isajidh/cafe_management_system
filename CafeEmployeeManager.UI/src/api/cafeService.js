@@ -13,6 +13,10 @@ const cafeService = {
     const response = await axios.post(`${API_URL}/CreateCafe`, cafe);
     return response.data;
   },
+  updateCafe: async (cafe) => {
+    const response = await axios.put(`${API_URL}/UpdateCafe`, cafe);
+    return response.data;
+  },
 };
 
 export default cafeService;

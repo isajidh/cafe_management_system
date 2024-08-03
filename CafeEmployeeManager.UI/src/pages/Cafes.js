@@ -8,12 +8,17 @@ import { Container, Typography, TextField, Button } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import AddCafeModal from "../components/Cafe/AddCafeModal";
 import { useCafe } from "../components/CafeContext";
+import EditCafeModal from "../components/Cafe/EditCafeModal";
 
 const Cafes = () => {
   const dispatch = useDispatch();
   const cafes = useSelector((state) => state.cafes.items);
   const [location, setLocation] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalAddOpen, setModalAddOpen] = useState(false);
+  const [modalEditOpen, setModalEditOpen] = useState(false);
+  const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
+  const [selectedCafe, setSelectedCafe] = useState(null);
+
   const navigate = useNavigate();
   const { setCafeID } = useCafe();
 
@@ -66,7 +71,7 @@ const Cafes = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => handleEdit(params.value)}
+            onClick={() => handleEditCafe(params.data)}
           >
             Edit
           </Button>
@@ -82,9 +87,12 @@ const Cafes = () => {
     },
   ];
 
-  const handleEdit = (id) => {
+  const handleEditCafe = (cafe) => {
+    setSelectedCafe(cafe);
+
+    setModalEditOpen(true);
     // Add logic for editing a cafe
-    console.log("Edit button clicked", id);
+    console.log("Edit button clicked", cafe);
   };
 
   const handleDelete = (id) => {
@@ -108,14 +116,20 @@ const Cafes = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => setModalOpen(true)}
+        onClick={() => setModalAddOpen(true)}
       >
         Add New Cafe
       </Button>
       <AddCafeModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        open={modalAddOpen}
+        onClose={() => setModalAddOpen(false)}
         onSubmit={handleAddCafe}
+      />
+      <EditCafeModal
+        open={modalEditOpen}
+        onClose={() => setModalEditOpen(false)}
+        onSubmit={handleEditCafe}
+        cafe={selectedCafe}
       />
       <div
         className="ag-theme-alpine"

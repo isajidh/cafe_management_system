@@ -168,6 +168,7 @@ const AddEmployeeModal = ({ open, onClose }) => {
             <DatePicker
               label="Start Date"
               name="startDate"
+              maxDate={dayjs()}
               value={employee.startDate}
               onChange={(date) => handleDateChange(date)}
             />

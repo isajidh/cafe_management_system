@@ -5,8 +5,13 @@ import {
   CREATE_CAFE_REQUEST,
   CREATE_CAFE_SUCCESS,
   FETCH_CAFES_REQUEST,
+  UPDATE_CAFE_REQUEST,
 } from "../actions/types";
-import { fetchCafesSuccess } from "../actions/cafeActions";
+import {
+  fetchCafesSuccess,
+  updateCafeSuccess,
+  updateCafeFailure,
+} from "../actions/cafeActions";
 
 function* fetchCafesSaga(action) {
   try {
@@ -27,7 +32,18 @@ function* createCafeSaga(action) {
   }
 }
 
+function* updateCafeSaga(action) {
+  try {
+    const response = yield call(cafeService.updateCafe, action.payload);
+    yield put(updateCafeSuccess(response.data));
+    yield put(fetchCafesSuccess()); // Refetch cafes to update the list
+  } catch (error) {
+    yield put(updateCafeFailure(error.message));
+  }
+}
+
 export function* watchFetchCafes() {
   yield takeLatest(FETCH_CAFES_REQUEST, fetchCafesSaga);
   yield takeLatest(CREATE_CAFE_REQUEST, createCafeSaga);
+  yield takeLatest(UPDATE_CAFE_REQUEST, updateCafeSaga);
 }

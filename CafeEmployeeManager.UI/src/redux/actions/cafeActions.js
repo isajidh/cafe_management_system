@@ -5,6 +5,9 @@ import {
   CREATE_CAFE_REQUEST,
   CREATE_CAFE_SUCCESS,
   CREATE_CAFE_FAILURE,
+  UPDATE_CAFE_REQUEST,
+  UPDATE_CAFE_SUCCESS,
+  UPDATE_CAFE_FAILURE,
 } from "./types";
 
 export const fetchCafes = (location) => ({
@@ -34,5 +37,21 @@ export const createCafeSuccess = (cafe) => ({
 
 export const createCafeFailure = (error) => ({
   type: CREATE_CAFE_FAILURE,
+  payload: error,
+});
+
+// Update cafe actions
+export const updateCafe = (cafe) => ({
+  type: UPDATE_CAFE_REQUEST,
+  payload: cafe,
+});
+
+export const updateCafeSuccess = (cafe) => ({
+  type: UPDATE_CAFE_SUCCESS,
+  payload: cafe,
+});
+
+export const updateCafeFailure = (error) => ({
+  type: UPDATE_CAFE_FAILURE,
   payload: error,
 });
