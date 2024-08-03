@@ -6,7 +6,7 @@ namespace CafeEmployeeManager.API.Repositories
     public interface ICafeRepository : IRepository<Cafe>
     {
         Task<(int, string)> AddAsync(CafeRequestBody entity);
-        Task<IEnumerable<Cafe>> GetCafesAsync(string location = null);
+        Task<IEnumerable<CafeEmployee>> GetCafesAsync(string location = null);
         Task<(int, string)> UpdateAsync(Cafe entity);
         Task<(int, string)> DeleteAsync(string id);
     }

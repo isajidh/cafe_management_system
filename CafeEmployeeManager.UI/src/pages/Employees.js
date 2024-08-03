@@ -6,16 +6,21 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { Button } from "@material-ui/core";
 import AddEmployeeModal from "../components/Employee/AddEmployeeModal";
+import { useCafe } from "../components/CafeContext";
 
 const Employees = () => {
   const dispatch = useDispatch();
   const { employees, loading, error } = useSelector((state) => state.employees);
-  const [cafe, setCafe] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const { cafeID, setCafeID } = useCafe();
 
   useEffect(() => {
-    dispatch(fetchEmployeesWithCafe(cafe));
-  }, [cafe, dispatch]);
+    if (cafeID) {
+      dispatch(fetchEmployeesWithCafe(cafeID));
+    } else {
+      dispatch(fetchEmployeesWithCafe(""));
+    }
+  }, [cafeID, setCafeID, dispatch]);
 
   const columns = [
     { headerName: "Employee ID", field: "employeeId" },
@@ -27,17 +32,17 @@ const Employees = () => {
     {
       headerName: "Actions",
       field: "actions",
-      cellRendererFramework: (params) => (
+      cellRenderer: (params) => (
         <div>
           <Button
-            variant="outlined"
+            variant="contained"
             color="primary"
             onClick={() => handleEdit(params.data)}
           >
             Edit
           </Button>
           <Button
-            variant="outlined"
+            variant="contained"
             color="secondary"
             onClick={() => handleDelete(params.data.id)}
           >

@@ -98,14 +98,14 @@ namespace CafeEmployeeManager.API.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Cafe>> GetCafesAsync(string location)
+        public async Task<IEnumerable<CafeEmployee>> GetCafesAsync(string location)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("loc", location, DbType.String, ParameterDirection.Input);
 
-                var cafes = await connection.QueryAsync<Cafe>(
+                var cafes = await connection.QueryAsync<CafeEmployee>(
                     "get_cafes_sp",
                     parameters,
                     commandType: CommandType.StoredProcedure

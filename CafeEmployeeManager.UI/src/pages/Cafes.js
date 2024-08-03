@@ -7,6 +7,7 @@ import { fetchCafes } from "../redux/actions/cafeActions";
 import { Container, Typography, TextField, Button } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import CafeFormModal from "../components/Cafe/CafeFormModal";
+import { useCafe } from "../components/CafeContext";
 
 const Cafes = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const Cafes = () => {
   const [location, setLocation] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { setCafeID } = useCafe();
 
   useEffect(() => {
     dispatch(fetchCafes(location));
@@ -24,7 +26,8 @@ const Cafes = () => {
   };
 
   const handleEmployeesClick = (cafeId) => {
-    navigate(`/employees?cafeId=${cafeId}`);
+    setCafeID(cafeId);
+    navigate(`/employees`);
   };
 
   const handleAddCafe = (newCafe) => {
@@ -44,7 +47,7 @@ const Cafes = () => {
       headerName: "Employees",
       field: "employees",
       cellRenderer: (params) => (
-        <span class="employees-link">Link{params.value}</span>
+        <span class="employees-link">{params.value}</span>
       ),
     },
     {
