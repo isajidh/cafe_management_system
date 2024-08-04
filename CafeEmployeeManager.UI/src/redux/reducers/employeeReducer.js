@@ -64,13 +64,6 @@ const employeeReducer = (state = initialState, action) => {
         error: null,
       };
 
-    case ADD_EMPLOYEE_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        employees: [...state.employees, action.payload],
-      };
-
     case ADD_EMPLOYEE_FAILURE:
       return {
         ...state,

@@ -43,7 +43,7 @@ export const fetchEmployeesWithCafeFailure = (error) => ({
   payload: error,
 });
 
-//Add employee
+//Add Employee Actions
 export const addEmployeeRequest = (employeeData) => ({
   type: ADD_EMPLOYEE_REQUEST,
   payload: employeeData,
@@ -59,9 +59,10 @@ export const addEmployeeFailure = (error) => ({
   payload: error,
 });
 
-export const updateEmployeeRequest = (employeeData) => ({
+//Update Employee Actions
+export const updateEmployeeRequest = (employee) => ({
   type: UPDATE_EMPLOYEE_REQUEST,
-  payload: employeeData,
+  payload: employee,
 });
 
 export const updateEmployeeSuccess = (employee) => ({

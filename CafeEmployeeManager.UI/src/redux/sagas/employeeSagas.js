@@ -15,15 +15,6 @@ import {
   UPDATE_EMPLOYEE_REQUEST,
 } from "../actions/types";
 
-function* fetchEmployeesSaga() {
-  try {
-    const employees = yield call(employeeService.getEmployeesWithCafe);
-    yield put(fetchEmployeesSuccess(employees));
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 function* fetchEmployeesWithCafeSaga(action) {
   try {
     const employees = yield call(
@@ -38,10 +29,13 @@ function* fetchEmployeesWithCafeSaga(action) {
 
 function* createEmployeeSaga(action) {
   try {
-    const newCafe = yield call(employeeService.createEmployee, action.payload);
-    yield put({ type: ADD_EMPLOYEE_SUCCESS, payload: newCafe });
-    // Fetch cafes again to update the list after adding new cafe
-    yield put({ type: ADD_EMPLOYEE_REQUEST });
+    const newEmployee = yield call(
+      employeeService.createEmployee,
+      action.payload
+    );
+    yield put({ type: ADD_EMPLOYEE_SUCCESS, payload: newEmployee });
+    // Fetch employees again to update the list after adding new cafe
+    yield put({ type: FETCH_EMPLOYEES_WITH_CAFE_REQUEST });
   } catch (error) {
     yield put({ type: ADD_EMPLOYEE_FAILURE, payload: error.message });
   }

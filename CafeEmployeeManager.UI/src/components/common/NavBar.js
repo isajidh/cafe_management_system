@@ -1,20 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useCafe } from "../CafeContext";
-import { useDispatch } from "react-redux";
-import { fetchEmployeesWithCafe } from "../../redux/actions/employeeActions";
 
 const NavBar = () => {
-  const { cafeID, setCafeID } = useCafe();
-  const dispatch = useDispatch();
+  const { setCafeID } = useCafe();
   const handleEmployeeButtonClick = () => {
-    setCafeID(""); // Clear cafeID before navigating
+    setCafeID(""); // Clear cafeID
   };
-
-  useEffect(() => {
-    dispatch(fetchEmployeesWithCafe(cafeID));
-  }, [cafeID, dispatch]);
 
   return (
     <AppBar position="static">

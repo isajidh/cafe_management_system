@@ -71,9 +71,7 @@ const Employees = () => {
   }, [employees]);
 
   useEffect(() => {
-    if (cafeID) {
-      dispatch(fetchEmployeesWithCafe(cafeID));
-    }
+    dispatch(fetchEmployeesWithCafe(cafeID));
   }, [cafeID, dispatch]);
 
   return (

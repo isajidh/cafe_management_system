@@ -28,6 +28,7 @@ export const fetchCafesFailure = (error) => ({
   payload: error,
 });
 
+//Add New Cafe Actions
 export const createCafe = (cafe) => ({
   type: CREATE_CAFE_REQUEST,
   payload: cafe,
