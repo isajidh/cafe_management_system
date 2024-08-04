@@ -20,6 +20,12 @@ const employeeService = {
     );
     return response.data;
   },
+  deleteEmployee: async (id) => {
+    const response = await axios.delete(`${API_URL}`, {
+      params: { id },
+    });
+    return response.data;
+  },
 };
 
 export default employeeService;

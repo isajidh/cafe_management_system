@@ -61,7 +61,7 @@ export const updateCafeFailure = (error) => ({
 });
 
 // Delete cafe actions
-export const deleteCafe = (id) => ({
+export const deleteCafeRequest = (id) => ({
   type: DELETE_CAFE_REQUEST,
   payload: id,
 });

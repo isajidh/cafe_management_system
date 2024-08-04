@@ -5,10 +5,12 @@ const MyTextBox = ({
   label,
   name,
   value,
+  type,
   onChange,
   error,
   helperText,
   inputProps,
+  required,
 }) => (
   <TextField
     label={label}
@@ -20,6 +22,8 @@ const MyTextBox = ({
     inputProps={inputProps}
     fullWidth
     margin="normal"
+    type
+    required
   />
 );
 

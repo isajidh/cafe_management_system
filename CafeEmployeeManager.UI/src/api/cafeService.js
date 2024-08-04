@@ -18,7 +18,7 @@ const cafeService = {
     return response.data;
   },
   deleteCafe: async (id) => {
-    const response = await axios.delete(`${API_URL}/DeleteCafe`, {
+    const response = await axios.delete(`${API_URL}`, {
       params: { id },
     });
     return response.data;

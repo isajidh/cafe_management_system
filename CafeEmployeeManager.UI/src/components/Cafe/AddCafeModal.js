@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Modal, Box, Typography, TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { createCafe } from "../../redux/actions/cafeActions";
+import MyTextBox from "../common/MyTextBox";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -57,35 +58,24 @@ const AddCafeModal = ({ open, onClose }) => {
           Add New Café
         </Typography>
         <form onSubmit={handleSubmit}>
-          <TextField
+          <MyTextBox
             name="name"
             label="Name"
-            variant="outlined"
-            fullWidth
-            className={classes.formField}
-            value={formValues.name}
             onChange={handleChange}
+            value={formValues.name}
+            error={formValues.name.length < 6 || formValues.name.length > 10}
+            helperText="Name must be between 6 and 10 characters."
+            inputProps={{ minLength: 6, maxLength: 10 }}
             required
           />
-          <TextField
-            name="description"
+          <MyTextBox
             label="Description"
-            variant="outlined"
-            fullWidth
-            className={classes.formField}
+            name="description"
             value={formValues.description}
             onChange={handleChange}
-            required
-          />
-          <TextField
-            name="employees"
-            label="Employees"
-            variant="outlined"
-            fullWidth
-            className={classes.formField}
-            value={formValues.employees}
-            onChange={handleChange}
-            type="number"
+            error={formValues.description.length > 256}
+            helperText="Description must be less than 256 characters."
+            inputProps={{ maxLength: 256 }}
             required
           />
           <TextField
@@ -97,12 +87,9 @@ const AddCafeModal = ({ open, onClose }) => {
             value={formValues.logo}
             onChange={handleChange}
           />
-          <TextField
-            name="location"
+          <MyTextBox
             label="Location"
-            variant="outlined"
-            fullWidth
-            className={classes.formField}
+            name="location"
             value={formValues.location}
             onChange={handleChange}
             required

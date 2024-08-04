@@ -106,8 +106,8 @@ namespace CafeEmployeeManager.API.Controllers
         }
 
         // DELETE api/employee/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteEmployee(string id)
+        [HttpDelete]
+        public async Task<ActionResult> DeleteEmployee([FromQuery] string id)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 

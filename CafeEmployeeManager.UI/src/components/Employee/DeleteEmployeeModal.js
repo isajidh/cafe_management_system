@@ -8,23 +8,23 @@ import {
   Typography,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { deleteCafeRequest } from "../../redux/actions/cafeActions";
+import { deleteEmployeeRequest } from "../../redux/actions/employeeActions";
 
-const DeleteCafeModal = ({ open, onClose, cafe }) => {
+const DeleteEmployeeModal = ({ open, onClose, employee }) => {
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(deleteCafeRequest(cafe.id));
+    dispatch(deleteEmployeeRequest(employee?.employeeId));
     onClose();
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Delete Cafe</DialogTitle>
+      <DialogTitle>Delete Employee</DialogTitle>
       <DialogContent>
         <Typography>
-          Are you sure you want to delete the cafe {cafe.name}?
+          Are you sure you want to delete the employee {employee?.employeeName}?
         </Typography>
       </DialogContent>
       <DialogActions>
@@ -37,4 +37,4 @@ const DeleteCafeModal = ({ open, onClose, cafe }) => {
   );
 };
 
-export default DeleteCafeModal;
+export default DeleteEmployeeModal;

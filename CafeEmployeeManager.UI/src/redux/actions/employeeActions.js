@@ -11,6 +11,9 @@ import {
   UPDATE_EMPLOYEE_REQUEST,
   UPDATE_EMPLOYEE_SUCCESS,
   UPDATE_EMPLOYEE_FAILURE,
+  DELETE_EMPLOYEE_REQUEST,
+  DELETE_EMPLOYEE_SUCCESS,
+  DELETE_EMPLOYEE_FAILURE,
 } from "./types";
 
 export const fetchEmployees = () => ({
@@ -72,5 +75,21 @@ export const updateEmployeeSuccess = (employee) => ({
 
 export const updateEmployeeFailure = (error) => ({
   type: UPDATE_EMPLOYEE_FAILURE,
+  payload: error,
+});
+
+//Delete Employee Actions
+export const deleteEmployeeRequest = (employeeId) => ({
+  type: DELETE_EMPLOYEE_REQUEST,
+  payload: employeeId,
+});
+
+export const deleteEmployeeSuccess = (employee) => ({
+  type: DELETE_EMPLOYEE_SUCCESS,
+  payload: employee,
+});
+
+export const deleteEmployeeFailure = (error) => ({
+  type: DELETE_EMPLOYEE_FAILURE,
   payload: error,
 });

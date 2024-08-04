@@ -3,13 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Modal,
-  TextField,
   Button,
   Typography,
   InputLabel,
   Select,
   MenuItem,
   FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { addEmployeeRequest } from "../../redux/actions/employeeActions";
@@ -18,6 +20,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import MyTextBox from "../common/MyTextBox";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -97,52 +100,46 @@ const AddEmployeeModal = ({ open, onClose }) => {
         <Typography variant="h6" id="simple-modal-title">
           Add New Employee
         </Typography>
-        <TextField
+        <MyTextBox
           label="Name"
           name="name"
-          className={classes.formField}
           value={employee.name}
           onChange={handleChange}
-          fullWidth
-          margin="normal"
+          required
         />
-        <TextField
+        <MyTextBox
           label="Email"
           name="emailAddress"
           type="email"
-          className={classes.formField}
           value={employee.emailAddress}
           onChange={handleChange}
-          fullWidth
           margin="normal"
         />
-        <TextField
+        <MyTextBox
           label="Phone Number"
           name="phoneNumber"
           type="tel"
-          className={classes.formField}
           value={employee.phoneNumber}
           onChange={handleChange}
-          fullWidth
-          margin="normal"
           inputProps={{ pattern: "[89][0-9]{7}", maxLength: 8 }}
           error={!!validationMessage}
           helperText={validationMessage}
         />
-        <FormControl fullWidth margin="normal" className={classes.formField}>
-          <InputLabel id="gender-select-label">Gender</InputLabel>
-          <Select
-            labelId="gender-select-label"
+
+        <FormControl component="fieldset" className={classes.formField}>
+          <RadioGroup
             name="gender"
             value={employee.gender || ""}
             onChange={handleChange}
-            fullWidth
           >
-            <MenuItem value="male">Male</MenuItem>
-            <MenuItem value="female">Female</MenuItem>
-          </Select>
+            <FormControlLabel value="Male" control={<Radio />} label="Male" />
+            <FormControlLabel
+              value="Female"
+              control={<Radio />}
+              label="Female"
+            />
+          </RadioGroup>
         </FormControl>
-
         <InputLabel id="cafe-select-label">Café</InputLabel>
         <Select
           labelId="cafe-select-label"

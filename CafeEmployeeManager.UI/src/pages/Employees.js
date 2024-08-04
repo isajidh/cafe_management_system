@@ -8,12 +8,14 @@ import { Button, Container, Typography } from "@material-ui/core";
 import AddEmployeeModal from "../components/Employee/AddEmployeeModal";
 import { useCafe } from "../components/CafeContext";
 import EditEmployeeModal from "../components/Employee/EditEmployeeModal";
+import DeleteEmployeeModal from "../components/Employee/DeleteEmployeeModal";
 
 const Employees = () => {
   const dispatch = useDispatch();
   const { employees, loading, error } = useSelector((state) => state.employees);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedEmployee, setSelectedEmploye] = useState(null);
   const { cafeID } = useCafe();
   const gridRef = useRef(null);
@@ -46,7 +48,7 @@ const Employees = () => {
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => handleDelete(params.data.id)}
+            onClick={() => handleDelete(params.data)}
           >
             Delete
           </Button>
@@ -60,8 +62,9 @@ const Employees = () => {
     setShowEditModal(true);
   };
 
-  const handleDelete = (employeeId) => {
-    // Implement delete functionality
+  const handleDelete = (employee) => {
+    setSelectedEmploye(employee);
+    setShowDeleteModal(true);
   };
 
   useEffect(() => {
@@ -86,10 +89,6 @@ const Employees = () => {
       >
         Add New Employee
       </Button>
-      <AddEmployeeModal
-        open={showAddModal}
-        onClose={() => setShowAddModal(false)}
-      />
       <div
         className="ag-theme-alpine"
         style={{ height: 400, width: "100%", marginTop: "20px" }}
@@ -107,12 +106,26 @@ const Employees = () => {
           }}
         />
       </div>
-      <EditEmployeeModal
-        open={showEditModal}
-        onClose={() => setShowEditModal(false)}
-        selectedEmployee={selectedEmployee}
-        onSubmit={handleEdit}
+      <AddEmployeeModal
+        open={showAddModal}
+        onClose={() => setShowAddModal(false)}
       />
+
+      {selectedEmployee && showEditModal && (
+        <EditEmployeeModal
+          open={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          selectedEmployee={selectedEmployee}
+        />
+      )}
+
+      {selectedEmployee && showDeleteModal && (
+        <DeleteEmployeeModal
+          open={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          employee={selectedEmployee}
+        />
+      )}
     </Container>
   );
 };

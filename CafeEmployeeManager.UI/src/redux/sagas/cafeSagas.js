@@ -7,6 +7,8 @@ import {
   FETCH_CAFES_REQUEST,
   UPDATE_CAFE_REQUEST,
   DELETE_CAFE_REQUEST,
+  UPDATE_CAFE_SUCCESS,
+  UPDATE_CAFE_FAILURE,
 } from "../actions/types";
 import {
   fetchCafesSuccess,
@@ -39,10 +41,10 @@ function* createCafeSaga(action) {
 function* updateCafeSaga(action) {
   try {
     yield call(cafeService.updateCafe, action.payload);
-    yield put(updateCafeSuccess(action.payload));
+    yield put({ type: UPDATE_CAFE_SUCCESS, payload: action.payload });
     yield put({ type: FETCH_CAFES_REQUEST }); // Refetch cafes to update the list
   } catch (error) {
-    yield put(updateCafeFailure(error.message));
+    yield put({ type: UPDATE_CAFE_FAILURE, payload: error.message });
   }
 }
 
