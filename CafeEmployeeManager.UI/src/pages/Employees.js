@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployeesWithCafe } from "../redux/actions/employeeActions";
 import { AgGridReact } from "ag-grid-react";
@@ -16,21 +16,25 @@ const Employees = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedEmployee, setSelectedEmploye] = useState(null);
   const { cafeID } = useCafe();
-
-  useEffect(() => {
-    if (cafeID) {
-      dispatch(fetchEmployeesWithCafe(cafeID));
-    }
-    dispatch(fetchEmployeesWithCafe(""));
-  }, [cafeID, dispatch]);
+  const gridRef = useRef(null);
 
   const columns = [
-    { headerName: "Employee ID", field: "employeeId" },
-    { headerName: "Name", field: "employeeName" },
-    { headerName: "Email", field: "emailAddress" },
-    { headerName: "Phone Number", field: "phoneNumber" },
-    { headerName: "Days Worked", field: "daysWorked" },
-    { headerName: "Café Name", field: "cafeName" },
+    {
+      headerName: "Employee ID",
+      field: "employeeId",
+      autoSize: true,
+      flex: 1,
+    },
+    { headerName: "Name", field: "employeeName", autoSize: true, flex: 1 },
+    { headerName: "Email", field: "emailAddress", autoSize: true, flex: 1 },
+    {
+      headerName: "Phone Number",
+      field: "phoneNumber",
+      autoSize: true,
+      flex: 1,
+    },
+    { headerName: "Days Worked", field: "daysWorked", autoSize: true, flex: 1 },
+    { headerName: "Café Name", field: "cafeName", autoSize: true, flex: 1 },
     {
       headerName: "Actions",
       field: "actions",
@@ -52,6 +56,8 @@ const Employees = () => {
           </Button>
         </div>
       ),
+      autoSize: true,
+      flex: 1,
     },
   ];
 
@@ -63,6 +69,18 @@ const Employees = () => {
   const handleDelete = (employeeId) => {
     // Implement delete functionality
   };
+
+  useEffect(() => {
+    if (gridRef.current && gridRef.current.columnApi) {
+      gridRef.current.columnApi.autoSizeAllColumns();
+    }
+  }, [employees]);
+
+  useEffect(() => {
+    if (cafeID) {
+      dispatch(fetchEmployeesWithCafe(cafeID));
+    }
+  }, [cafeID, dispatch]);
 
   return (
     <Container>
@@ -90,6 +108,10 @@ const Employees = () => {
           pagination={true}
           paginationPageSize={10}
           domLayout="autoHeight"
+          ref={gridRef}
+          onGridReady={() => {
+            gridRef.current.api.sizeColumnsToFit();
+          }}
         />
       </div>
       <EditEmployeeModal

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
@@ -18,6 +18,7 @@ const Cafes = () => {
   const [modalEditOpen, setModalEditOpen] = useState(false);
   const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
   const [selectedCafe, setSelectedCafe] = useState(null);
+  const gridRef = useRef(null);
 
   const navigate = useNavigate();
   const { setCafeID } = useCafe();
@@ -45,15 +46,24 @@ const Cafes = () => {
       headerName: "Logo",
       field: "logo",
       cellRenderer: (params) => <img src={params.value} alt="Logo" />,
+      autoSize: true,
+      flex: 1,
     },
-    { headerName: "Name", field: "name" },
-    { headerName: "Description", field: "description" },
+    { headerName: "Name", field: "name", autoSize: true, flex: 1 },
+    {
+      headerName: "Description",
+      field: "description",
+      autoSize: true,
+      flex: 1,
+    },
     {
       headerName: "Employees",
       field: "employees",
       cellRenderer: (params) => (
         <span class="employees-link">{params.value}</span>
       ),
+      autoSize: true,
+      flex: 1,
     },
     {
       headerName: "Location",
@@ -62,6 +72,8 @@ const Cafes = () => {
       filterParams: {
         filterOptions: ["contains"], // Allows wildcard search
       },
+      autoSize: true,
+      flex: 1,
     },
     {
       headerName: "Actions",
@@ -84,6 +96,8 @@ const Cafes = () => {
           </Button>
         </>
       ),
+      autoSize: true,
+      flex: 1,
     },
   ];
 
@@ -96,6 +110,12 @@ const Cafes = () => {
     // Add logic for deleting a cafe
     console.log("Delete button clicked", id);
   };
+
+  useEffect(() => {
+    if (gridRef.current && gridRef.current.columnApi) {
+      gridRef.current.columnApi.autoSizeAllColumns();
+    }
+  }, [cafes]);
 
   return (
     <Container>
@@ -129,11 +149,18 @@ const Cafes = () => {
         <AgGridReact
           rowData={cafes}
           columnDefs={columns}
-          defaultColDef={{ sortable: true, filter: true }}
+          pagination={true}
+          paginationPageSize={10}
+          domLayout="autoHeight"
+          defaultColDef={{ sortable: true }}
           onCellClicked={(event) => {
             if (event.colDef.field === "employees") {
               handleEmployeesClick(event.data.id);
             }
+          }}
+          ref={gridRef}
+          onGridReady={() => {
+            gridRef.current.api.sizeColumnsToFit();
           }}
         />
       </div>

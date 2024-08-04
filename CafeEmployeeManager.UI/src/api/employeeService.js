@@ -3,9 +3,9 @@ import axios from "axios";
 const API_URL = "https://localhost:7092/api/Employee";
 
 const employeeService = {
-  getAllEmployeesWithCafe: async (cafeId) => {
+  getAllEmployeesWithCafe: async (cafe) => {
     const response = await axios.get(`${API_URL}/GetAllEmployeesWithCafe`, {
-      params: { cafeId },
+      params: { cafe },
     });
     return response.data;
   },
