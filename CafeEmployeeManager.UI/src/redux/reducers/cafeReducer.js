@@ -1,6 +1,7 @@
 import { UPDATE_CAFE_REQUEST } from "../actions/types";
 import { UPDATE_CAFE_FAILURE } from "../actions/types";
-import { UPDATE_CAFE_SUCCESS } from "../actions/types";
+import { DELETE_CAFE_FAILURE } from "../actions/types";
+import { DELETE_CAFE_REQUEST } from "../actions/types";
 import { FETCH_CAFES_FAILURE } from "../actions/types";
 import { FETCH_CAFES_REQUEST, FETCH_CAFES_SUCCESS } from "../actions/types";
 
@@ -16,6 +17,7 @@ const cafeReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+        error: null,
       };
     case FETCH_CAFES_SUCCESS:
       return {
@@ -27,17 +29,20 @@ const cafeReducer = (state = initialState, action) => {
       return { ...state, loading: false, error: action.payload };
     case UPDATE_CAFE_REQUEST:
       return { ...state, loading: true, error: null };
-    case UPDATE_CAFE_SUCCESS:
+    case UPDATE_CAFE_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+    case DELETE_CAFE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case DELETE_CAFE_FAILURE:
       return {
         ...state,
         loading: false,
-        cafes: state.cafes.map((cafe) =>
-          cafe.id === action.payload.id ? action.payload : cafe
-        ),
+        error: action.payload,
       };
-    case UPDATE_CAFE_FAILURE:
-      return { ...state, loading: false, error: action.payload };
-
     default:
       return state;
   }

@@ -17,6 +17,12 @@ const cafeService = {
     const response = await axios.put(`${API_URL}/UpdateCafe`, cafe);
     return response.data;
   },
+  deleteCafe: async (id) => {
+    const response = await axios.delete(`${API_URL}/DeleteCafe`, {
+      params: { id },
+    });
+    return response.data;
+  },
 };
 
 export default cafeService;

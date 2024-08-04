@@ -22,19 +22,15 @@ const Employees = () => {
     {
       headerName: "Employee ID",
       field: "employeeId",
-      autoSize: true,
-      flex: 1,
     },
-    { headerName: "Name", field: "employeeName", autoSize: true, flex: 1 },
-    { headerName: "Email", field: "emailAddress", autoSize: true, flex: 1 },
+    { headerName: "Name", field: "employeeName" },
+    { headerName: "Email", field: "emailAddress" },
     {
       headerName: "Phone Number",
       field: "phoneNumber",
-      autoSize: true,
-      flex: 1,
     },
-    { headerName: "Days Worked", field: "daysWorked", autoSize: true, flex: 1 },
-    { headerName: "Café Name", field: "cafeName", autoSize: true, flex: 1 },
+    { headerName: "Days Worked", field: "daysWorked" },
+    { headerName: "Café Name", field: "cafeName" },
     {
       headerName: "Actions",
       field: "actions",
@@ -56,8 +52,6 @@ const Employees = () => {
           </Button>
         </div>
       ),
-      autoSize: true,
-      flex: 1,
     },
   ];
 
@@ -107,6 +101,7 @@ const Employees = () => {
           columnDefs={columns}
           pagination={true}
           paginationPageSize={10}
+          defaultColDef={{ sortable: true }}
           domLayout="autoHeight"
           ref={gridRef}
           onGridReady={() => {

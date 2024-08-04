@@ -2,7 +2,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_cafe_and_employees_sp`(
     IN p_cafe_id VARCHAR(36)
 )
 BEGIN
-	DECLARE v_cafe_name TEXT DEFAULT '';
+	DECLARE v_cafe_name TEXT;
 -- --------------------------------------------------------------------------------------
     -- Declare variables for error handling
     DECLARE result_code INT DEFAULT 0;
@@ -23,10 +23,20 @@ BEGIN
         SELECT -1 AS result_code, CONCAT('Error: ', result_message) AS Message;
     END;
 -- ---------------------------------------------------------------------
+
     -- Start the transaction
     START TRANSACTION;
 	
 	SELECT Name INTO v_cafe_name FROM Cafe WHERE id = p_cafe_id;
+
+    -- Check if the employee exists
+    IF v_cafe_name IS NULL THEN
+        ROLLBACK;
+        SET result_message = 'Cafe not found';
+        SET result_code = -1;
+        SELECT result_code AS result_code, result_message AS result_message;
+        SIGNAL SQLSTATE '45000';
+    END IF;
 
     -- Delete employees associated with the cafe
     DELETE FROM EmployeeCafeRelationship

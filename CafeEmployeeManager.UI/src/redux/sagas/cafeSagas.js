@@ -6,11 +6,14 @@ import {
   CREATE_CAFE_SUCCESS,
   FETCH_CAFES_REQUEST,
   UPDATE_CAFE_REQUEST,
+  DELETE_CAFE_REQUEST,
 } from "../actions/types";
 import {
   fetchCafesSuccess,
   updateCafeSuccess,
   updateCafeFailure,
+  deleteCafeSuccess,
+  deleteCafeFailure,
 } from "../actions/cafeActions";
 
 function* fetchCafesSaga(action) {
@@ -21,6 +24,7 @@ function* fetchCafesSaga(action) {
     console.error(error);
   }
 }
+
 function* createCafeSaga(action) {
   try {
     const newCafe = yield call(cafeService.createCafe, action.payload);
@@ -34,11 +38,21 @@ function* createCafeSaga(action) {
 
 function* updateCafeSaga(action) {
   try {
-    const response = yield call(cafeService.updateCafe, action.payload);
-    yield put(updateCafeSuccess(response.data));
-    yield put(fetchCafesSuccess()); // Refetch cafes to update the list
+    yield call(cafeService.updateCafe, action.payload);
+    yield put(updateCafeSuccess(action.payload));
+    yield put({ type: FETCH_CAFES_REQUEST }); // Refetch cafes to update the list
   } catch (error) {
     yield put(updateCafeFailure(error.message));
+  }
+}
+
+function* deleteCafeSaga(action) {
+  try {
+    yield call(cafeService.deleteCafe, action.payload);
+    yield put(deleteCafeSuccess(action.payload));
+    yield put({ type: FETCH_CAFES_REQUEST }); // Refetch cafes to update the list
+  } catch (error) {
+    yield put(deleteCafeFailure(error.message));
   }
 }
 
@@ -46,4 +60,5 @@ export function* watchFetchCafes() {
   yield takeLatest(FETCH_CAFES_REQUEST, fetchCafesSaga);
   yield takeLatest(CREATE_CAFE_REQUEST, createCafeSaga);
   yield takeLatest(UPDATE_CAFE_REQUEST, updateCafeSaga);
+  yield takeLatest(DELETE_CAFE_REQUEST, deleteCafeSaga);
 }

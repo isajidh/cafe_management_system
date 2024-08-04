@@ -8,6 +8,9 @@ import {
   UPDATE_CAFE_REQUEST,
   UPDATE_CAFE_SUCCESS,
   UPDATE_CAFE_FAILURE,
+  DELETE_CAFE_REQUEST,
+  DELETE_CAFE_SUCCESS,
+  DELETE_CAFE_FAILURE,
 } from "./types";
 
 export const fetchCafes = (location) => ({
@@ -53,5 +56,21 @@ export const updateCafeSuccess = (cafe) => ({
 
 export const updateCafeFailure = (error) => ({
   type: UPDATE_CAFE_FAILURE,
+  payload: error,
+});
+
+// Delete cafe actions
+export const deleteCafe = (id) => ({
+  type: DELETE_CAFE_REQUEST,
+  payload: id,
+});
+
+export const deleteCafeSuccess = (id) => ({
+  type: DELETE_CAFE_SUCCESS,
+  payload: id,
+});
+
+export const deleteCafeFailure = (error) => ({
+  type: DELETE_CAFE_FAILURE,
   payload: error,
 });

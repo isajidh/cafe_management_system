@@ -3,6 +3,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_employee_sp`(
 )
 BEGIN
     DECLARE v_employee_name TEXT;
+-- --------------------------------------------------------------------------------------
+    -- Declare variables for error handling
     DECLARE result_code INT DEFAULT 0;
     DECLARE result_message TEXT DEFAULT '';
 

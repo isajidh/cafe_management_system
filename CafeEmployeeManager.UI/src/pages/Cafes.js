@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import AddCafeModal from "../components/Cafe/AddCafeModal";
 import { useCafe } from "../components/CafeContext";
 import EditCafeModal from "../components/Cafe/EditCafeModal";
+import DeleteCafeModal from "../components/Cafe/DeleteCafeModal";
 
 const Cafes = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,6 @@ const Cafes = () => {
   const [modalEditOpen, setModalEditOpen] = useState(false);
   const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
   const [selectedCafe, setSelectedCafe] = useState(null);
-  const gridRef = useRef(null);
 
   const navigate = useNavigate();
   const { setCafeID } = useCafe();
@@ -36,9 +36,9 @@ const Cafes = () => {
     navigate(`/employees`);
   };
 
-  const handleAddCafe = (newCafe) => {
-    // Add logic for adding a new cafe
-    console.log("New Café details: ", newCafe);
+  const handleDeleteClick = (cafe) => {
+    setSelectedCafe(cafe);
+    setModalDeleteOpen(true);
   };
 
   const columns = [
@@ -46,15 +46,11 @@ const Cafes = () => {
       headerName: "Logo",
       field: "logo",
       cellRenderer: (params) => <img src={params.value} alt="Logo" />,
-      autoSize: true,
-      flex: 1,
     },
     { headerName: "Name", field: "name", autoSize: true, flex: 1 },
     {
       headerName: "Description",
       field: "description",
-      autoSize: true,
-      flex: 1,
     },
     {
       headerName: "Employees",
@@ -62,8 +58,6 @@ const Cafes = () => {
       cellRenderer: (params) => (
         <span class="employees-link">{params.value}</span>
       ),
-      autoSize: true,
-      flex: 1,
     },
     {
       headerName: "Location",
@@ -72,8 +66,6 @@ const Cafes = () => {
       filterParams: {
         filterOptions: ["contains"], // Allows wildcard search
       },
-      autoSize: true,
-      flex: 1,
     },
     {
       headerName: "Actions",
@@ -90,14 +82,12 @@ const Cafes = () => {
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => handleDelete(params.value)}
+            onClick={() => handleDeleteClick(params.data)}
           >
             Delete
           </Button>
         </>
       ),
-      autoSize: true,
-      flex: 1,
     },
   ];
 
@@ -106,16 +96,10 @@ const Cafes = () => {
     setModalEditOpen(true);
   };
 
-  const handleDelete = (id) => {
-    // Add logic for deleting a cafe
-    console.log("Delete button clicked", id);
+  const handleDeleteCafe = (cafe) => {
+    setSelectedCafe(cafe);
+    setModalDeleteOpen(true);
   };
-
-  useEffect(() => {
-    if (gridRef.current && gridRef.current.columnApi) {
-      gridRef.current.columnApi.autoSizeAllColumns();
-    }
-  }, [cafes]);
 
   return (
     <Container>
@@ -137,11 +121,6 @@ const Cafes = () => {
       >
         Add New Cafe
       </Button>
-      <AddCafeModal
-        open={modalAddOpen}
-        onClose={() => setModalAddOpen(false)}
-        onSubmit={handleAddCafe}
-      />
       <div
         className="ag-theme-alpine"
         style={{ height: 400, width: "100%", marginTop: "20px" }}
@@ -158,18 +137,30 @@ const Cafes = () => {
               handleEmployeesClick(event.data.id);
             }
           }}
-          ref={gridRef}
-          onGridReady={() => {
-            gridRef.current.api.sizeColumnsToFit();
-          }}
         />
       </div>
-      <EditCafeModal
-        open={modalEditOpen}
-        onClose={() => setModalEditOpen(false)}
-        onSubmit={handleEditCafe}
-        cafe={selectedCafe}
+
+      <AddCafeModal
+        open={modalAddOpen}
+        onClose={() => setModalAddOpen(false)}
       />
+
+      {selectedCafe && (
+        <EditCafeModal
+          open={modalEditOpen}
+          onClose={() => setModalEditOpen(false)}
+          onSubmit={handleEditCafe}
+          cafe={selectedCafe}
+        />
+      )}
+      {selectedCafe && (
+        <DeleteCafeModal
+          open={modalDeleteOpen}
+          onClose={() => setModalDeleteOpen(false)}
+          onSubmit={handleDeleteCafe}
+          cafe={selectedCafe}
+        />
+      )}
     </Container>
   );
 };
