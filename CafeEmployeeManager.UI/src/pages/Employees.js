@@ -89,6 +89,8 @@ const Employees = () => {
       >
         Add New Employee
       </Button>
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: "red" }}>Error: {error}</p>}
       <div
         className="ag-theme-alpine"
         style={{ height: 400, width: "100%", marginTop: "20px" }}

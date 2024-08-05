@@ -13,7 +13,7 @@ import DeleteCafeModal from "../components/Cafe/DeleteCafeModal";
 
 const Cafes = () => {
   const dispatch = useDispatch();
-  const cafes = useSelector((state) => state.cafes.items);
+  const { cafes, loading, error } = useSelector((state) => state.cafes);
   const [location, setLocation] = useState("");
   const [modalAddOpen, setModalAddOpen] = useState(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
@@ -121,12 +121,14 @@ const Cafes = () => {
       >
         Add New Cafe
       </Button>
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: "red" }}>Error: {error}</p>}
       <div
         className="ag-theme-alpine"
         style={{ height: 400, width: "100%", marginTop: "20px" }}
       >
         <AgGridReact
-          rowData={cafes}
+          rowData={cafes?.items}
           columnDefs={columns}
           pagination={true}
           paginationPageSize={10}

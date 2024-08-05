@@ -16,6 +16,7 @@ import {
   updateCafeFailure,
   deleteCafeSuccess,
   deleteCafeFailure,
+  fetchCafesFailure,
 } from "../actions/cafeActions";
 
 function* fetchCafesSaga(action) {
@@ -23,7 +24,7 @@ function* fetchCafesSaga(action) {
     const cafes = yield call(cafeService.getCafes, action.payload);
     yield put(fetchCafesSuccess(cafes));
   } catch (error) {
-    console.error(error);
+    yield put(fetchCafesFailure(error.message));
   }
 }
 
