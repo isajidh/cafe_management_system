@@ -94,7 +94,7 @@ const AddCafeModal = ({ open, onClose }) => {
             required
           />
           <Button type="submit" variant="contained" color="primary" fullWidth>
-            Add Cafe
+            Add Café
           </Button>
         </form>
       </Box>

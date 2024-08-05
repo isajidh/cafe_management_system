@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchEmployeesWithCafe } from "../../redux/actions/employeeActions";
+import {
+  fetchAllEmployees,
+  fetchEmployeesWithCafe,
+} from "../../redux/actions/employeeActions";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -75,7 +78,11 @@ const Employees = () => {
   }, [employees]);
 
   useEffect(() => {
-    dispatch(fetchEmployeesWithCafe(cafeID));
+    if (cafeID) {
+      dispatch(fetchEmployeesWithCafe(cafeID));
+    } else {
+      dispatch(fetchAllEmployees());
+    }
   }, [cafeID, dispatch]);
 
   return (

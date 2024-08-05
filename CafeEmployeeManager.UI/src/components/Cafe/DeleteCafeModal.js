@@ -21,10 +21,10 @@ const DeleteCafeModal = ({ open, onClose, cafe }) => {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Delete Cafe</DialogTitle>
+      <DialogTitle>Delete Café</DialogTitle>
       <DialogContent>
         <Typography>
-          Are you sure you want to delete the cafe {cafe.name}?
+          Are you sure you want to delete the Café {cafe.name}?
         </Typography>
       </DialogContent>
       <DialogActions>

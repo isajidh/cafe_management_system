@@ -1,6 +1,8 @@
 import {
   DELETE_EMPLOYEE_FAILURE,
   DELETE_EMPLOYEE_REQUEST,
+  FETCH_ALL_EMPLOYEES_FAILURE,
+  FETCH_ALL_EMPLOYEES_REQUEST,
   FETCH_EMPLOYEES_WITH_CAFE_SUCCESS,
 } from "../actions/types";
 import { ADD_EMPLOYEE_REQUEST } from "../actions/types";
@@ -12,7 +14,6 @@ import {
   FETCH_EMPLOYEES_SUCCESS,
   FETCH_EMPLOYEES_FAILURE,
   UPDATE_EMPLOYEE_REQUEST,
-  UPDATE_EMPLOYEE_SUCCESS,
   UPDATE_EMPLOYEE_FAILURE,
 } from "../actions/types";
 
@@ -24,6 +25,17 @@ const initialState = {
 
 const employeeReducer = (state = initialState, action) => {
   switch (action.type) {
+    case FETCH_ALL_EMPLOYEES_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case FETCH_ALL_EMPLOYEES_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
     case FETCH_EMPLOYEES_REQUEST:
       return {
         ...state,
@@ -76,14 +88,6 @@ const employeeReducer = (state = initialState, action) => {
         ...state,
         loading: true,
         error: null,
-      };
-    case UPDATE_EMPLOYEE_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        employees: state.employees.map((emp) =>
-          emp.id === action.payload.id ? action.payload : emp
-        ),
       };
     case UPDATE_EMPLOYEE_FAILURE:
       return {

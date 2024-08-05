@@ -4,6 +4,7 @@ import {
   addEmployeeSuccess,
   deleteEmployeeFailure,
   deleteEmployeeSuccess,
+  fetchAllEmployeesFailure,
   fetchEmployeesWithCafeFailure,
   fetchEmployeesWithCafeSuccess,
   updateEmployeeFailure,
@@ -13,9 +14,19 @@ import employeeService from "../../api/employeeService";
 import {
   ADD_EMPLOYEE_REQUEST,
   DELETE_EMPLOYEE_REQUEST,
+  FETCH_ALL_EMPLOYEES_REQUEST,
   FETCH_EMPLOYEES_WITH_CAFE_REQUEST,
   UPDATE_EMPLOYEE_REQUEST,
 } from "../actions/types";
+
+function* fetchAllEmployeesSaga() {
+  try {
+    const employees = yield call(employeeService.getAllEmployees);
+    yield put(fetchEmployeesWithCafeSuccess(employees));
+  } catch (error) {
+    yield put(fetchAllEmployeesFailure(error.message));
+  }
+}
 
 function* fetchEmployeesWithCafeSaga(action) {
   try {
@@ -37,7 +48,7 @@ function* createEmployeeSaga(action) {
     );
     yield put(addEmployeeSuccess(newEmployee));
     // Fetch employees again to update the list after adding new cafe
-    yield put({ type: FETCH_EMPLOYEES_WITH_CAFE_REQUEST });
+    yield put({ type: FETCH_ALL_EMPLOYEES_REQUEST });
   } catch (error) {
     yield put(addEmployeeFailure(error.message));
   }
@@ -45,10 +56,11 @@ function* createEmployeeSaga(action) {
 
 function* updateEmployeeSaga(action) {
   try {
-    yield call(employeeService.updateEmployee, action.payload);
-    yield put(updateEmployeeSuccess(action.payload));
+    const employee = yield call(employeeService.updateEmployee, action.payload);
+    yield put(updateEmployeeSuccess(employee));
     // Fetch employees again to update the list after adding new cafe
     yield put({ type: FETCH_EMPLOYEES_WITH_CAFE_REQUEST });
+    yield put({ type: FETCH_ALL_EMPLOYEES_REQUEST });
   } catch (error) {
     yield put(updateEmployeeFailure(error.message));
   }
@@ -59,13 +71,14 @@ function* deleteEmployeeSaga(action) {
     yield call(employeeService.deleteEmployee, action.payload);
     yield put(deleteEmployeeSuccess(action.payload));
     // Fetch employees again to update the list after adding new cafe
-    yield put({ type: FETCH_EMPLOYEES_WITH_CAFE_REQUEST });
+    yield put({ type: FETCH_ALL_EMPLOYEES_REQUEST });
   } catch (error) {
     yield put(deleteEmployeeFailure(error.message));
   }
 }
 
 export function* watchFetchEmployees() {
+  yield takeLatest(FETCH_ALL_EMPLOYEES_REQUEST, fetchAllEmployeesSaga);
   yield takeLatest(
     FETCH_EMPLOYEES_WITH_CAFE_REQUEST,
     fetchEmployeesWithCafeSaga

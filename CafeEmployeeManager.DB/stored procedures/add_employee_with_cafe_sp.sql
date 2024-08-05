@@ -16,19 +16,13 @@ BEGIN
     DECLARE result_message TEXT DEFAULT '';
 
     -- Declare the exit handler for SQL exceptions
-    DECLARE exit handler FOR SQLEXCEPTION
-    BEGIN
-        -- Rollback if needed
-        ROLLBACK;
-
-        -- Retrieve error details
-        GET DIAGNOSTICS CONDITION 1
-            result_code = MYSQL_ERRNO,
-            result_message = MESSAGE_TEXT;
-
-        -- Output general error message and error code
-        SELECT -1 AS result_code, CONCAT('Error: ', result_message) AS Message;
-    END;
+	DECLARE exit handler for SQLEXCEPTION
+	 BEGIN
+	  GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, 
+	   @errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
+	  SELECT @errno as result_code, @text as result_message;
+	 END;
+    -- End exit handler for SQL exceptions
 
     -- Validate phone number (starts with 9 or 8)
     IF LEFT(p_phone_number, 1) NOT IN ('9', '8') THEN
@@ -63,11 +57,15 @@ BEGIN
         INSERT INTO Employee (id, name, emailaddress, phonenumber, gender)
         VALUES (p_id, p_name, p_email_address, p_phone_number, p_gender);
 
-        -- Insert the relationship (if cafeId is provided)
-        IF p_cafe_id IS NOT NULL AND p_cafe_id != '' THEN
-            INSERT INTO EmployeeCafeRelationship (employeeid, employeename, cafeid, cafename, startdate, daysworked)
-            VALUES (p_id, p_name, p_cafe_id, v_cafe_name, p_start_date, v_days_worked);
-        END IF;
+		-- If cafeId is provided, insert the relationship
+		IF p_cafe_id IS NOT NULL AND p_cafe_id != '' THEN
+			INSERT INTO EmployeeCafeRelationship (employeeid, employeename, cafeid, cafename, startdate, daysworked)
+			VALUES (p_id, p_name, p_cafe_id, v_cafe_name, p_start_date, v_days_worked);
+		ELSE
+			-- If no cafeId is given
+			INSERT INTO EmployeeCafeRelationship (employeeid, employeename, cafeid, startdate, daysworked)
+			VALUES (p_id, p_name, -1 ,p_start_date, v_days_worked);
+		END IF;        
 
         -- Commit the transaction
         COMMIT;

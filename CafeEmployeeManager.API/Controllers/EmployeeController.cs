@@ -64,27 +64,6 @@ namespace CafeEmployeeManager.API.Controllers
             }
         }
 
-        [HttpPost("createEmployeeOnly")]
-        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeRequestBody request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var result = await _employeeRepository.AddAsync(request);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in creating employee");
-                return StatusCode(500, ex.Message);
-            }
-        }
-
         [HttpPost]
         //4
         public async Task<IActionResult> AddEmployeeWithCafe([FromBody] EmployeeRequestBody request)
@@ -122,7 +101,7 @@ namespace CafeEmployeeManager.API.Controllers
 
             try
             {
-                (int resultCode, string result_message) = await _employeeRepository.UpdateEmployeeWithCafeRelationship(request);
+                (int resultCode, string result_message) = await _employeeRepository.UpdatemployeeWithCafe(request);
 
                 if (resultCode == 0)
                 {

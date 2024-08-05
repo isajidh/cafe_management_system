@@ -45,7 +45,7 @@ const Cafes = () => {
       headerName: "Employees",
       field: "employees",
       cellRenderer: (params) => (
-        <span class="employees-link">{params.value}</span>
+        <span className="employees-link">{params.value}</span>
       ),
     },
     {
@@ -111,7 +111,7 @@ const Cafes = () => {
   return (
     <Container className={styles.tableContainer}>
       <Typography variant="h4" gutterBottom>
-        Cafes
+        Cafés
       </Typography>
       <MyTextBox
         label="Filter by location"
@@ -128,7 +128,7 @@ const Cafes = () => {
           setModalAddOpen(true);
         }}
       >
-        Add New Cafe
+        Add New Café
       </Button>
       <div className={`${styles.tableStyle} ag-theme-alpine`}>
         <AgGridReact

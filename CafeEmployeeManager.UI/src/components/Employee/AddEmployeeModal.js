@@ -53,7 +53,7 @@ const AddEmployeeModal = ({ open, onClose }) => {
     emailAddress: "",
     phoneNumber: "",
     gender: "",
-    cafeId: "-1",
+    cafeId: "",
     startDate: date,
   });
 
@@ -155,13 +155,14 @@ const AddEmployeeModal = ({ open, onClose }) => {
             />
           </RadioGroup>
         </FormControl>
-        <InputLabel id="cafe-select-label">Cafe</InputLabel>
+        <InputLabel id="cafe-select-label">Café</InputLabel>
         <Select
           labelId="cafe-select-label"
           name="cafeId"
           value={employee.cafeId || ""}
           onChange={handleChange}
           fullWidth
+          required
         >
           {Array.isArray(cafes) ? (
             cafes.map((cafe) => (
@@ -170,7 +171,7 @@ const AddEmployeeModal = ({ open, onClose }) => {
               </MenuItem>
             ))
           ) : (
-            <p>No cafes available.</p>
+            <p>No cafés available.</p>
           )}
         </Select>
         {/* //DatePicker */}
