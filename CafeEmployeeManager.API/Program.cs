@@ -22,11 +22,6 @@ try
     builder.Logging.ClearProviders();
     builder.Logging.AddSerilog();
 
-    // Register SQL database connection
-    // var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
-    // builder.Services.AddDbContext<AppDbContext>(options =>
-    //     options.UseSqlServer(connectionString));
-
     // Register MYSQL database connection
     var mySqlConnectionString = builder.Configuration.GetConnectionString("MySQLConnectionString");
     builder.Services.AddDbContext<AppDbContext>(options =>
