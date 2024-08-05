@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Modal, Box, Typography, TextField, Button } from "@material-ui/core";
+import { Modal, Box, Typography, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { createCafe } from "../../redux/actions/cafeActions";
 import MyTextBox from "../common/MyTextBox";
+import ImageUploader from "../common/ImageUploader";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -29,7 +30,6 @@ const AddCafeModal = ({ open, onClose }) => {
   const [formValues, setFormValues] = useState({
     name: "",
     description: "",
-    employees: "",
     logo: "",
     location: "",
   });
@@ -39,6 +39,9 @@ const AddCafeModal = ({ open, onClose }) => {
     setFormValues({ ...formValues, [name]: value });
   };
 
+  const handleImageUpload = (filename) => {
+    setFormValues({ ...formValues, logo: filename });
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createCafe(formValues));
@@ -78,7 +81,7 @@ const AddCafeModal = ({ open, onClose }) => {
             inputProps={{ maxLength: 256 }}
             required
           />
-          <TextField
+          {/* <TextField
             name="logo"
             label="Logo URL"
             variant="outlined"
@@ -86,7 +89,8 @@ const AddCafeModal = ({ open, onClose }) => {
             className={classes.formField}
             value={formValues.logo}
             onChange={handleChange}
-          />
+          /> */}
+          <ImageUploader onImageUpload={handleImageUpload} />
           <MyTextBox
             label="Location"
             name="location"

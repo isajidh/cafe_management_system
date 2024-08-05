@@ -22,11 +22,16 @@ const Cafes = () => {
   const navigate = useNavigate();
   const { setCafeID } = useCafe();
 
-  const columns = [
+  const columnDefs = [
     {
       headerName: "Logo",
       field: "logo",
-      cellRenderer: (params) => <img src={params.value} alt="Logo" />,
+      cellRenderer: (params) => (
+        <img
+          src={`${process.env.PUBLIC_URL}/assets/images/logo/${params.value}`}
+          alt="Logo"
+        />
+      ),
     },
     { headerName: "Name", field: "name", autoSize: true, flex: 1 },
     {
@@ -128,7 +133,7 @@ const Cafes = () => {
       >
         <AgGridReact
           rowData={cafes}
-          columnDefs={columns}
+          columnDefs={columnDefs}
           pagination={true}
           paginationPageSize={10}
           domLayout="autoHeight"
