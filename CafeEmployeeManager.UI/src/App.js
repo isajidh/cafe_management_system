@@ -2,8 +2,8 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Container } from "@material-ui/core";
 import NavBar from "./components/common/NavBar";
-import Cafes from "./pages/Cafes";
-import Employees from "./pages/Employees";
+import Cafes from "./pages/cafes/Cafes";
+import Employees from "./pages/employees/Employees";
 
 function App() {
   return (
@@ -14,7 +14,6 @@ function App() {
           <Route path="/cafes" element={<Cafes />} />
           <Route path="/employees" element={<Employees />} />
           <Route index path="/" exact element={<Cafes />} />{" "}
-          {/* Default Route */}
         </Routes>
       </Container>
     </Router>

@@ -173,6 +173,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
               value={formData.cafeId || ""}
               onChange={handleChange}
               fullWidth
+              required
             >
               {Array.isArray(cafes) ? (
                 cafes.map((cafe) => (
@@ -181,7 +182,7 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
                   </MenuItem>
                 ))
               ) : (
-                <p>No cafes available.</p>
+                <p>No cafés available.</p>
               )}
             </Select>
           </FormControl>

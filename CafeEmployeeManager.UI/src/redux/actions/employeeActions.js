@@ -1,7 +1,4 @@
 import {
-  FETCH_EMPLOYEES_FAILURE,
-  FETCH_EMPLOYEES_REQUEST,
-  FETCH_EMPLOYEES_SUCCESS,
   FETCH_EMPLOYEES_WITH_CAFE_FAILURE,
   FETCH_EMPLOYEES_WITH_CAFE_REQUEST,
   FETCH_EMPLOYEES_WITH_CAFE_SUCCESS,
@@ -14,19 +11,23 @@ import {
   DELETE_EMPLOYEE_REQUEST,
   DELETE_EMPLOYEE_SUCCESS,
   DELETE_EMPLOYEE_FAILURE,
+  FETCH_ALL_EMPLOYEES_REQUEST,
+  FETCH_ALL_EMPLOYEES_SUCCESS,
+  FETCH_ALL_EMPLOYEES_FAILURE,
 } from "./types";
 
-export const fetchEmployees = () => ({
-  type: FETCH_EMPLOYEES_REQUEST,
+// Get All Employees
+export const fetchAllEmployees = () => ({
+  type: FETCH_ALL_EMPLOYEES_REQUEST,
 });
 
-export const fetchEmployeesSuccess = (employees) => ({
-  type: FETCH_EMPLOYEES_SUCCESS,
+export const fetchAllEmployeesSuccess = (employees) => ({
+  type: FETCH_ALL_EMPLOYEES_SUCCESS,
   payload: employees,
 });
 
-export const fetchCafesFailure = (error) => ({
-  type: FETCH_EMPLOYEES_FAILURE,
+export const fetchAllEmployeesFailure = (error) => ({
+  type: FETCH_ALL_EMPLOYEES_FAILURE,
   payload: error,
 });
 

@@ -13,6 +13,7 @@ import {
   DELETE_CAFE_FAILURE,
 } from "./types";
 
+// Get All cafes actions
 export const fetchCafes = (location) => ({
   type: FETCH_CAFES_REQUEST,
   payload: location,

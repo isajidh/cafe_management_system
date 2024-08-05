@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import { fetchCafes } from "../redux/actions/cafeActions";
-import { Container, Typography, TextField, Button } from "@material-ui/core";
+import { fetchCafes } from "../../redux/actions/cafeActions";
+import { Container, Typography, Button } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
-import AddCafeModal from "../components/Cafe/AddCafeModal";
-import { useCafe } from "../components/CafeContext";
-import EditCafeModal from "../components/Cafe/EditCafeModal";
-import DeleteCafeModal from "../components/Cafe/DeleteCafeModal";
+import AddCafeModal from "../../components/Cafe/AddCafeModal";
+import { useCafe } from "../../components/CafeContext";
+import EditCafeModal from "../../components/Cafe/EditCafeModal";
+import DeleteCafeModal from "../../components/Cafe/DeleteCafeModal";
 import styles from "./Cafes.module.css";
+import MyTextBox from "../../components/common/MyTextBox";
 
 const Cafes = () => {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const Cafes = () => {
       headerName: "Employees",
       field: "employees",
       cellRenderer: (params) => (
-        <span class="employees-link">{params.value}</span>
+        <span className="employees-link">{params.value}</span>
       ),
     },
     {
@@ -110,15 +111,14 @@ const Cafes = () => {
   return (
     <Container className={styles.tableContainer}>
       <Typography variant="h4" gutterBottom>
-        Cafes
+        Cafés
       </Typography>
-      <TextField
-        label="Filter by Location"
+      <MyTextBox
+        label="Filter by location"
         variant="outlined"
         className={styles.filterBy}
         value={location}
         onChange={handleLocationChange}
-        fullWidth
       />
       <Button
         variant="contained"
@@ -128,7 +128,7 @@ const Cafes = () => {
           setModalAddOpen(true);
         }}
       >
-        Add New Cafe
+        Add New Café
       </Button>
       <div className={`${styles.tableStyle} ag-theme-alpine`}>
         <AgGridReact

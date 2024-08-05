@@ -13,7 +13,6 @@ namespace CafeEmployeeManager.API.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly IConfiguration _config;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ILogger<EmployeeController> _logger;
 
@@ -21,35 +20,48 @@ namespace CafeEmployeeManager.API.Controllers
         {
             _employeeRepository = employeeRepository;
             _logger = logger;
-            _config = config;
         }
 
-        // GET api/employee
+        // GET api/getAllEmployees
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployees()
-        {
-            return Ok();
-        }
-
-        // GET api/employee/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Employee>> GetEmployeeById(int id)
-        {
-            //return await _dbContext.Employees.FindAsync(id);
-            return Ok();
-        }
-
-        [HttpPost("createEmployeeOnly")]
-        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeRequestBody request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _employeeRepository.AddAsync(request);
+            try
+            {
+                var cafes = await _employeeRepository.GetAllEmployeesAsync();
+                return Ok(cafes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in getting all employees");
+                return StatusCode(500, ex.Message);
+            }
+        }
 
-            return Ok(result);
+        // GET api/getEmployeesWithCafe
+        [HttpGet("GetAllEmployeesWithCafe")]
+        public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployeesWithCafe([FromQuery] string cafe = null)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var cafes = await _employeeRepository.GetEmployeesByCafeAsync(cafe);
+                return Ok(cafes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in getting employees with cafe");
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost]
@@ -61,47 +73,49 @@ namespace CafeEmployeeManager.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            (int resultCode, string result_message) = await _employeeRepository.AddEmployeeWithCafeRelationship(request);
+            try
+            {
+                (int resultCode, string result_message) = await _employeeRepository.AddEmployeeWithCafeRelationship(request);
 
-            if (resultCode == 0)
+                if (resultCode == 0)
+                {
+                    return Ok(result_message);
+                }
+                else
+                {
+                    return BadRequest(new { Error = result_message });
+                }
+            }
+            catch (Exception ex)
             {
-                return Ok(result_message);
-            }else
-            {
-                return BadRequest(new { Error = result_message });
+                _logger.LogError(ex, "Error in creating employee with cafe");
+                return StatusCode(500, ex.Message);
             }
         }
-
-        // PUT api/employee/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Employee>> UpdateEmployee(string id, Employee employee)
-        {
-            if (id != employee.Id)
-            {
-                return BadRequest();
-            }
-
-            //_dbContext.Entry(employee).State = EntityState.Modified;
-            //await _dbContext.SaveChangesAsync();
-            return Ok(employee);
-        }
-
 
         // PUT api/employee/
-        [HttpPut("UpdateEmployeeWithCafe")]
+        [HttpPut]
         public async Task<ActionResult<Employee>> UpdateEmployeeWithCafeRelationship(EmployeeCafeRequestBody request)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            (int resultCode, string result_message) = await _employeeRepository.UpdateEmployeeWithCafeRelationship(request);
+            try
+            {
+                (int resultCode, string result_message) = await _employeeRepository.UpdatemployeeWithCafe(request);
 
-            if (resultCode == 0)
-            {
-                return Ok(result_message);
+                if (resultCode == 0)
+                {
+                    return Ok(result_message);
+                }
+                else
+                {
+                    return BadRequest(new { Error = result_message });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new { Error = result_message });
+                _logger.LogError(ex, "Error in updating employee with cafe");
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -111,25 +125,24 @@ namespace CafeEmployeeManager.API.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            (int resultCode, string result_message) = await _employeeRepository.DeleteAsync(id);
+            try
+            {
+                (int resultCode, string result_message) = await _employeeRepository.DeleteAsync(id);
 
-            if (resultCode == 0)
-            {
-                return Ok(result_message);
+                if (resultCode == 0)
+                {
+                    return Ok(result_message);
+                }
+                else
+                {
+                    return BadRequest(new { Error = result_message });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new { Error = result_message });
+                _logger.LogError(ex, "Error in deleting the customer");
+                return StatusCode(500, ex.Message);
             }
         }
-
-        // GET api/getEmployeesWithCafe
-        [HttpGet("GetAllEmployeesWithCafe")]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployeesWithCafe([FromQuery] string cafe = null)
-        {
-            var cafes = await _employeeRepository.GetEmployeesByCafeAsync(cafe);
-            return Ok(cafes);
-        }
-
     }
 }

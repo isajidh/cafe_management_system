@@ -3,7 +3,7 @@ using CafeEmployeeManager.API.Model.Request_Body;
 
 namespace CafeEmployeeManager.API.Repositories
 {
-    public interface ICafeRepository : IRepository<Cafe>
+    public interface ICafeRepository
     {
         Task<(int, string)> AddAsync(CafeRequestBody entity);
         Task<IEnumerable<CafeEmployee>> GetCafesAsync(string location = null);

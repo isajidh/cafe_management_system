@@ -23,37 +23,6 @@ namespace CafeEmployeeManager.API.Repositories
             _connectionString = _config.GetConnectionString("mySqlConnectionString");
         }
 
-        public async Task<int> AddAsync(EmployeeRequestBody request)
-        {
-
-            using (var connection = new MySqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                using (var command = new MySqlCommand("employee_i_sp", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    // Add parameters to the command
-                    command.Parameters.AddWithValue("p_name", request.Name);
-                    command.Parameters.AddWithValue("p_email_address", request.EmailAddress);
-                    command.Parameters.AddWithValue("p_phone_number", request.PhoneNumber);
-                    command.Parameters.AddWithValue("p_gender", request.Gender);
-
-
-                    // Execute the stored procedure
-                    var result = await command.ExecuteNonQueryAsync();
-                    return result;
-                }
-            }
-
-        }
-
-        public Task<int> AddAsync(Employee entity)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<(int, string)> AddEmployeeWithCafeRelationship(EmployeeRequestBody request)
         {
             try
@@ -73,7 +42,7 @@ namespace CafeEmployeeManager.API.Repositories
                     var result = await connection.QuerySingleAsync<dynamic>("add_employee_with_cafe_sp", parameters, commandType: CommandType.StoredProcedure);
 
                     int result_code = (int)result.result_code;
-                    string result_message = result.Message;
+                    string result_message = result.result_message;
 
                     return (result_code, result_message);
                 }
@@ -98,16 +67,10 @@ namespace CafeEmployeeManager.API.Repositories
                     // Execute the stored procedure and read the output
                     var result = await connection.QueryFirstOrDefaultAsync<dynamic>("delete_employee_sp", parameters, commandType: CommandType.StoredProcedure);
 
-                    if (result != null)
-                    {
-                        int resultCode = result.result_code;
-                        string resultMessage = result.result_message;
-                        return (resultCode, resultMessage);
-                    }
-                    else
-                    {
-                        return (-1, "An unknown error occurred.");
-                    }
+                    int result_code = (int)result.result_code;
+                    string result_message = result.result_message;
+
+                    return (result_code, result_message);
                 }
             }
             catch (MySqlException ex)
@@ -120,27 +83,7 @@ namespace CafeEmployeeManager.API.Repositories
             }
         }
 
-        public Task<int> DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Employee>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Employee> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> UpdateAsync(Employee entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<(int, string)> UpdateEmployeeWithCafeRelationship(EmployeeCafeRequestBody entity)
+        public async Task<(int, string)> UpdatemployeeWithCafe(EmployeeCafeRequestBody entity)
         {
             try
             {
@@ -207,5 +150,40 @@ namespace CafeEmployeeManager.API.Repositories
             return employees;
         }
 
+        public async Task<IEnumerable<EmployeeCafe>> GetAllEmployeesAsync()
+        {
+            var employees = new List<EmployeeCafe>();
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (var command = new MySqlCommand("get_all_employees_sp", connection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var employee = new EmployeeCafe
+                            {
+                                EmployeeId = reader.GetString("id"),
+                                EmployeeName = reader.GetString("name"),
+                                Gender = reader.GetString("gender"),
+                                EmailAddress = reader.GetString("emailAddress"),
+                                PhoneNumber = reader.GetString("phoneNumber"),
+                                CafeId = reader.IsDBNull("cafeId") ? string.Empty : reader.GetString("cafeId"),
+                                CafeName = reader.IsDBNull("cafeName") ? "-" : reader.GetString("cafeName"),
+                                DaysWorked = reader.IsDBNull("daysWorked") ? 0 : reader.GetInt32("daysWorked")
+                            };
+                            employees.Add(employee);
+                        }
+                    }
+                }
+            }
+
+            return employees;
+        }
     }
 }

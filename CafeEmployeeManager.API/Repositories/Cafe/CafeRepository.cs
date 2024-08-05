@@ -54,11 +54,6 @@ namespace CafeEmployeeManager.API.Repositories
             }
         }
 
-        public Task<int> AddAsync(Cafe entity)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<(int,string)> DeleteAsync(string id)
         {
             try
@@ -86,16 +81,6 @@ namespace CafeEmployeeManager.API.Repositories
             {
                 return (-2, ex.Message);
             }
-        }
-
-        public Task<IEnumerable<Cafe>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Cafe> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<CafeEmployee>> GetCafesAsync(string location)
@@ -145,16 +130,6 @@ namespace CafeEmployeeManager.API.Repositories
             {
                 return (-2, ex.Message);
             }
-        }
-
-        Task<int> IRepository<Cafe>.DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<int> IRepository<Cafe>.UpdateAsync(Cafe entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }
