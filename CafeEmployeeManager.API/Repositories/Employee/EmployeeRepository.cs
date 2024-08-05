@@ -207,5 +207,41 @@ namespace CafeEmployeeManager.API.Repositories
             return employees;
         }
 
+        public async Task<IEnumerable<EmployeeCafe>> GetAllEmployeesAsync()
+        {
+            var employees = new List<EmployeeCafe>();
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (var command = new MySqlCommand("get_all_employees_sp", connection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var employee = new EmployeeCafe
+                            {
+                                EmployeeId = reader.GetString("id"),
+                                EmployeeName = reader.GetString("name"),
+                                Gender = reader.GetString("gender"),
+                                EmailAddress = reader.GetString("emailAddress"),
+                                PhoneNumber = reader.GetString("phoneNumber"),
+                                CafeId = reader.IsDBNull("cafeId") ? string.Empty : reader.GetString("cafeId"),
+                                CafeName = reader.IsDBNull("cafeName") ? "-" : reader.GetString("cafeName"),
+                                DaysWorked = reader.IsDBNull("daysWorked") ? 0 : reader.GetInt32("daysWorked")
+                            };
+                            employees.Add(employee);
+                        }
+                    }
+                }
+            }
+
+            return employees;
+        }
+
     }
 }

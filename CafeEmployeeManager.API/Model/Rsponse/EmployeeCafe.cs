@@ -10,7 +10,7 @@ public partial class EmployeeCafe
     public string Gender { get; set; }
     public string EmailAddress { get; set; } = null!;
     public string PhoneNumber { get; set; } = null!;
-    public string CafeId { get; set; } = null!;
-    public string CafeName { get; set; } = null!;
-    public int DaysWorked { get; set; }
+    public string? CafeId { get; set; } = null!;
+    public string? CafeName { get; set; } = null!;
+    public int? DaysWorked { get; set; }
 }

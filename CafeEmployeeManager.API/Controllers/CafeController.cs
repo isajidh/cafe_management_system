@@ -11,20 +11,30 @@ namespace CafeEmployeeManager.API.Controllers
     public class CafesController : ControllerBase
     {
         private readonly ICafeRepository _cafeRepository;
+        private readonly ILogger<CafesController> _logger;
 
-        public CafesController(ICafeRepository cafeService)
+        public CafesController(ICafeRepository cafeService, ILogger<CafesController> logger)
         {
             _cafeRepository = cafeService;
+            _logger = logger;
         }
 
-        [HttpGet("GetCafes")]
+        [HttpGet]
         public async Task<IActionResult> GetCafes([FromQuery] string location = null)
         {
-            var cafes = await _cafeRepository.GetCafesAsync(location);
-            return Ok(cafes);
+            try
+            {
+                var cafes = await _cafeRepository.GetCafesAsync(location);
+                return Ok(cafes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching customers");
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        [HttpPost("CreateCafe")]
+        [HttpPost]
         public async Task<IActionResult> CreateCafe([FromBody] CafeRequestBody request)
         {
             if (!ModelState.IsValid)
@@ -32,19 +42,28 @@ namespace CafeEmployeeManager.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            (int result_code, string result_message) = await _cafeRepository.AddAsync(request);
+            try
+            {
+                
+                (int result_code, string result_message) = await _cafeRepository.AddAsync(request);
 
-            if (result_code == 0)
-            {
-                return Ok(result_message);
+                if (result_code == 0)
+                {
+                    return Ok(result_message);
+                }
+                else
+                {
+                    return BadRequest(new { Error = result_message });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new { Error = result_message });
+                _logger.LogError(ex, "Error in creating customer");
+                return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpPut("UpdateCafe")]
+        [HttpPut]
         public async Task<IActionResult> UpdateCafe([FromBody] Cafe request)
         {
             if (!ModelState.IsValid)
@@ -52,15 +71,23 @@ namespace CafeEmployeeManager.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            (int result_code, string result_message) = await _cafeRepository.UpdateAsync(request);
+            try
+            {
+                (int result_code, string result_message) = await _cafeRepository.UpdateAsync(request);
 
-            if (result_code == 0)
-            {
-                return Ok(result_message);
+                if (result_code == 0)
+                {
+                    return Ok(result_message);
+                }
+                else
+                {
+                    return BadRequest(new { Error = result_message });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new { Error = result_message });
+                _logger.LogError(ex, "Error in updating the cafe");
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -72,15 +99,23 @@ namespace CafeEmployeeManager.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            (int result_code, string result_message) = await _cafeRepository.DeleteAsync(id);
+            try
+            {
+                (int result_code, string result_message) = await _cafeRepository.DeleteAsync(id);
 
-            if (result_code == 0)
-            {
-                return Ok(result_message);
+                if (result_code == 0)
+                {
+                    return Ok(result_message);
+                }
+                else
+                {
+                    return BadRequest(new { Error = result_message });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new { Error = result_message });
+                _logger.LogError(ex, "Error in deleting the cafe");
+                return StatusCode(500, ex.Message);
             }
         }
 

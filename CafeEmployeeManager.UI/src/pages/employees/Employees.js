@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchEmployeesWithCafe } from "../redux/actions/employeeActions";
+import { fetchEmployeesWithCafe } from "../../redux/actions/employeeActions";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { Button, Container, Typography } from "@material-ui/core";
-import AddEmployeeModal from "../components/Employee/AddEmployeeModal";
-import { useCafe } from "../components/CafeContext";
-import EditEmployeeModal from "../components/Employee/EditEmployeeModal";
-import DeleteEmployeeModal from "../components/Employee/DeleteEmployeeModal";
+import AddEmployeeModal from "../../components/Employee/AddEmployeeModal";
+import { useCafe } from "../../components/CafeContext";
+import EditEmployeeModal from "../../components/Employee/EditEmployeeModal";
+import DeleteEmployeeModal from "../../components/Employee/DeleteEmployeeModal";
 import styles from "./Employees.module.css";
 
 const Employees = () => {

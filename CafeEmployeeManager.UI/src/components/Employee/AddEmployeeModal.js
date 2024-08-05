@@ -53,7 +53,7 @@ const AddEmployeeModal = ({ open, onClose }) => {
     emailAddress: "",
     phoneNumber: "",
     gender: "",
-    cafeId: "",
+    cafeId: "-1",
     startDate: date,
   });
 
@@ -84,6 +84,7 @@ const AddEmployeeModal = ({ open, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!validationMessage) {
       dispatch(addEmployeeRequest(employee));
       onClose();
@@ -105,6 +106,12 @@ const AddEmployeeModal = ({ open, onClose }) => {
           name="name"
           value={employee.name}
           onChange={handleChange}
+          error={
+            employee.name !== "" &&
+            (employee.name.length < 6 || employee.name.length > 10)
+          }
+          helperText="Name must be between 6 and 10 characters."
+          inputProps={{ minLength: 6, maxLength: 10 }}
           required
         />
         <MyTextBox
@@ -124,6 +131,7 @@ const AddEmployeeModal = ({ open, onClose }) => {
           inputProps={{ pattern: "[89][0-9]{7}", maxLength: 8 }}
           error={!!validationMessage}
           helperText={validationMessage}
+          required
         />
 
         <FormControl component="fieldset" className={classes.formField}>
@@ -131,8 +139,15 @@ const AddEmployeeModal = ({ open, onClose }) => {
             name="gender"
             value={employee.gender || ""}
             onChange={handleChange}
+            error={!!validationMessage}
+            helperText={validationMessage}
+            required
           >
-            <FormControlLabel value="Male" control={<Radio />} label="Male" />
+            <FormControlLabel
+              value="Male"
+              control={<Radio required={true} />}
+              label="Male"
+            />
             <FormControlLabel
               value="Female"
               control={<Radio />}

@@ -14,10 +14,7 @@ const employeeService = {
     return response.data;
   },
   updateEmployee: async (employee) => {
-    const response = await axios.put(
-      `${API_URL}/UpdateEmployeeWithCafe`,
-      employee
-    );
+    const response = await axios.put(`${API_URL}`, employee);
     return response.data;
   },
   deleteEmployee: async (id) => {
