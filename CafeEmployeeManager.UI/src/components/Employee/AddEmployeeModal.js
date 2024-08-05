@@ -140,7 +140,7 @@ const AddEmployeeModal = ({ open, onClose }) => {
             />
           </RadioGroup>
         </FormControl>
-        <InputLabel id="cafe-select-label">Café</InputLabel>
+        <InputLabel id="cafe-select-label">Cafe</InputLabel>
         <Select
           labelId="cafe-select-label"
           name="cafeId"
@@ -171,7 +171,7 @@ const AddEmployeeModal = ({ open, onClose }) => {
             />
           </LocalizationProvider>
         </FormControl>
-        <Button type="submit" variant="contained" color="primary">
+        <Button type="submit" variant="contained" color="primary" fullWidth>
           Add Employee
         </Button>
       </Box>

@@ -7,6 +7,7 @@ import { updateCafe } from "../../redux/actions/cafeActions";
 import { makeStyles } from "@material-ui/core/styles";
 import MyTextBox from "../common/MyTextBox";
 import { Typography } from "@material-ui/core";
+import ImageUploader from "../common/ImageUploader";
 
 const useStyles = makeStyles(() => ({
   formField: {
@@ -49,15 +50,8 @@ const EditCafeModal = ({ open, onClose, cafe }) => {
     setUnsavedChanges(true);
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file.size <= 2 * 1024 * 1024) {
-      // Max 2MB
-      setFormData({ ...formData, logo: file });
-      setUnsavedChanges(true);
-    } else {
-      alert("File size exceeds 2MB");
-    }
+  const handleImageUpload = (filename) => {
+    setFormData({ ...formData, logo: filename });
   };
 
   const handleSubmit = (e) => {
@@ -104,29 +98,34 @@ const EditCafeModal = ({ open, onClose, cafe }) => {
             helperText="Description must be less than 256 characters."
             inputProps={{ maxLength: 256 }}
           />
-          <Button
-            variant="contained"
-            component="label"
-            className={classes.fileInput}
-          >
-            Upload Logo
-            <input type="file" hidden onChange={handleFileChange} />
-          </Button>
+
+          <ImageUploader onImageUpload={handleImageUpload} />
           <MyTextBox
             label="Location"
             name="location"
             value={formData.location}
             onChange={handleChange}
           />
-          <Box mt={2}>
-            <Button type="submit" variant="contained" color="primary">
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: 2,
+            }}
+          >
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ flex: 1, mr: 1 }}
+            >
               Submit
             </Button>
             <Button
               onClick={handleClose}
               variant="outlined"
               color="secondary"
-              sx={{ ml: 2 }}
+              sx={{ flex: 1, ml: 1 }}
             >
               Cancel
             </Button>

@@ -30,7 +30,7 @@ const ImageUploader = ({ onImageUpload }) => {
         id="file-upload"
       />
       <label htmlFor="file-upload">
-        <Button variant="contained" component="span">
+        <Button variant="outlined" component="span">
           Upload Logo
         </Button>
       </label>

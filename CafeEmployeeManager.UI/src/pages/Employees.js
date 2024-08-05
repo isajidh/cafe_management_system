@@ -9,10 +9,11 @@ import AddEmployeeModal from "../components/Employee/AddEmployeeModal";
 import { useCafe } from "../components/CafeContext";
 import EditEmployeeModal from "../components/Employee/EditEmployeeModal";
 import DeleteEmployeeModal from "../components/Employee/DeleteEmployeeModal";
+import styles from "./Employees.module.css";
 
 const Employees = () => {
   const dispatch = useDispatch();
-  const { employees, loading, error } = useSelector((state) => state.employees);
+  const { employees } = useSelector((state) => state.employees);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -37,7 +38,7 @@ const Employees = () => {
       headerName: "Actions",
       field: "actions",
       cellRenderer: (params) => (
-        <div>
+        <div className={styles.buttonContainer}>
           <Button
             variant="contained"
             color="primary"
@@ -78,26 +79,19 @@ const Employees = () => {
   }, [cafeID, dispatch]);
 
   return (
-    <Container>
+    <Container className={styles.tableContainer}>
       <Typography variant="h4" gutterBottom>
         Employees
       </Typography>
       <Button
         variant="contained"
         color="primary"
-        onClick={() => {
-          debugger;
-          setShowAddModal(true);
-        }}
+        className={styles.addEmployeeButton}
+        onClick={() => setShowAddModal(true)}
       >
         Add New Employee
       </Button>
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
-      <div
-        className="ag-theme-alpine"
-        style={{ height: 400, width: "100%", marginTop: "20px" }}
-      >
+      <div className={`${styles.tableStyle} ag-theme-alpine`}>
         <AgGridReact
           rowData={employees}
           columnDefs={columns}

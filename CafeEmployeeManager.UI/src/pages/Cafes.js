@@ -10,6 +10,7 @@ import AddCafeModal from "../components/Cafe/AddCafeModal";
 import { useCafe } from "../components/CafeContext";
 import EditCafeModal from "../components/Cafe/EditCafeModal";
 import DeleteCafeModal from "../components/Cafe/DeleteCafeModal";
+import styles from "./Cafes.module.css";
 
 const Cafes = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ const Cafes = () => {
         <img
           src={`${process.env.PUBLIC_URL}/assets/images/logo/${params.value}`}
           alt="Logo"
+          className={styles.cafeImage}
         />
       ),
     },
@@ -57,7 +59,7 @@ const Cafes = () => {
       headerName: "Actions",
       field: "id",
       cellRenderer: (params) => (
-        <>
+        <div className={styles.buttonContainer}>
           <Button
             variant="contained"
             color="primary"
@@ -72,7 +74,7 @@ const Cafes = () => {
           >
             Delete
           </Button>
-        </>
+        </div>
       ),
     },
   ];
@@ -106,31 +108,29 @@ const Cafes = () => {
   }, [location, dispatch]);
 
   return (
-    <Container>
+    <Container className={styles.tableContainer}>
       <Typography variant="h4" gutterBottom>
         Cafes
       </Typography>
       <TextField
         label="Filter by Location"
         variant="outlined"
+        className={styles.filterBy}
         value={location}
         onChange={handleLocationChange}
         fullWidth
-        margin="normal"
       />
       <Button
         variant="contained"
         color="primary"
+        className={styles.addCafeButton}
         onClick={() => {
           setModalAddOpen(true);
         }}
       >
         Add New Cafe
       </Button>
-      <div
-        className="ag-theme-alpine"
-        style={{ height: 400, width: "100%", marginTop: "20px" }}
-      >
+      <div className={`${styles.tableStyle} ag-theme-alpine`}>
         <AgGridReact
           rowData={cafes}
           columnDefs={columnDefs}

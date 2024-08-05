@@ -1,0 +1,22 @@
+.tableStyle {
+  height: 400;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.addEmployeeButton {
+  margin-top: 20px;
+}
+
+.tableContainer {
+  margin: 20px;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 5px 10px;
+}
+
+.actionsButton {
+  margin: 5px;
+}

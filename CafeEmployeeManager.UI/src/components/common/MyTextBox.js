@@ -22,8 +22,8 @@ const MyTextBox = ({
     inputProps={inputProps}
     fullWidth
     margin="normal"
-    type
-    required
+    type={type}
+    required={required}
   />
 );
 

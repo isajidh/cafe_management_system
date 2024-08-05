@@ -7,7 +7,6 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  TextField,
 } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
@@ -15,10 +14,23 @@ import { makeStyles } from "@material-ui/core/styles";
 import { updateEmployeeRequest } from "../../redux/actions/employeeActions";
 import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
+import MyTextBox from "../common/MyTextBox";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    width: 400,
+  },
   formField: {
-    marginBottom: "16px",
+    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -100,40 +112,41 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Box component="form" onSubmit={handleSubmit} sx={{ ...modalStyle }}>
-        <div className={classes.modalContent}>
-          <TextField
+    <Modal open={open} onClose={handleClose} className={classes.modal}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{ ...modalStyle }}
+        className={classes.paper}
+      >
+        <div>
+          <MyTextBox
             label="Name"
             name="name"
             value={formData.name || ""}
             onChange={handleChange}
-            className={classes.formField}
-            fullWidth
+            error={
+              formData.name !== "" &&
+              (formData.name.length < 6 || formData.name.length > 10)
+            }
+            helperText="Name must be between 6 and 10 characters."
+            inputProps={{ minLength: 6, maxLength: 10 }}
             required
-            inputProps={{ maxLength: 10 }}
-            helperText="Minimum 6 and maximum 10 characters"
           />
-          <TextField
+          <MyTextBox
             label="Email"
             name="email"
             type="email"
             value={formData.emailAddress || ""}
             onChange={handleChange}
-            className={classes.formField}
-            fullWidth
             required
-            helperText="Please enter a valid email address"
           />
-          <TextField
+          <MyTextBox
             label="Phone Number"
             name="phoneNumber"
             type="tel"
-            className={classes.formField}
             value={formData.phoneNumber}
             onChange={handleChange}
-            fullWidth
-            margin="normal"
             inputProps={{ pattern: "[89][0-9]{7}", maxLength: 8 }}
             error={!!validationMessage}
             helperText={validationMessage}
@@ -172,12 +185,24 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
               )}
             </Select>
           </FormControl>
-          <Button onClick={handleSubmit} variant="contained" color="primary">
-            Save
-          </Button>
-          <Button onClick={handleClose} variant="outlined" color="secondary">
-            Cancel
-          </Button>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              color="primary"
+              sx={{ flex: 1, mr: 1 }}
+            >
+              Save
+            </Button>
+            <Button
+              onClick={handleClose}
+              variant="outlined"
+              color="secondary"
+              sx={{ flex: 1, ml: 1 }}
+            >
+              Cancel
+            </Button>
+          </Box>
         </div>
       </Box>
     </Modal>

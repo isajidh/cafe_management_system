@@ -42,6 +42,7 @@ const AddCafeModal = ({ open, onClose }) => {
   const handleImageUpload = (filename) => {
     setFormValues({ ...formValues, logo: filename });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createCafe(formValues));
@@ -66,7 +67,10 @@ const AddCafeModal = ({ open, onClose }) => {
             label="Name"
             onChange={handleChange}
             value={formValues.name}
-            error={formValues.name.length < 6 || formValues.name.length > 10}
+            error={
+              formValues.name !== "" &&
+              (formValues.name.length < 6 || formValues.name.length > 10)
+            }
             helperText="Name must be between 6 and 10 characters."
             inputProps={{ minLength: 6, maxLength: 10 }}
             required
@@ -81,15 +85,6 @@ const AddCafeModal = ({ open, onClose }) => {
             inputProps={{ maxLength: 256 }}
             required
           />
-          {/* <TextField
-            name="logo"
-            label="Logo URL"
-            variant="outlined"
-            fullWidth
-            className={classes.formField}
-            value={formValues.logo}
-            onChange={handleChange}
-          /> */}
           <ImageUploader onImageUpload={handleImageUpload} />
           <MyTextBox
             label="Location"
@@ -99,7 +94,7 @@ const AddCafeModal = ({ open, onClose }) => {
             required
           />
           <Button type="submit" variant="contained" color="primary" fullWidth>
-            Add Café
+            Add Cafe
           </Button>
         </form>
       </Box>
