@@ -85,7 +85,10 @@ const Employees = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => setShowAddModal(true)}
+        onClick={() => {
+          debugger;
+          setShowAddModal(true);
+        }}
       >
         Add New Employee
       </Button>

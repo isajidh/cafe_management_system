@@ -5,7 +5,6 @@ import {
 } from "../actions/types";
 import { ADD_EMPLOYEE_REQUEST } from "../actions/types";
 import { ADD_EMPLOYEE_FAILURE } from "../actions/types";
-import { ADD_EMPLOYEE_SUCCESS } from "../actions/types";
 import { FETCH_EMPLOYEES_WITH_CAFE_FAILURE } from "../actions/types";
 import { FETCH_EMPLOYEES_WITH_CAFE_REQUEST } from "../actions/types";
 import {

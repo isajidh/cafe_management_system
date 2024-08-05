@@ -13,33 +13,14 @@ import DeleteCafeModal from "../components/Cafe/DeleteCafeModal";
 
 const Cafes = () => {
   const dispatch = useDispatch();
-  const { cafes, loading, error } = useSelector((state) => state.cafes);
+  const cafes = useSelector((state) => state.cafes.items);
   const [location, setLocation] = useState("");
   const [modalAddOpen, setModalAddOpen] = useState(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
   const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
   const [selectedCafe, setSelectedCafe] = useState(null);
-
   const navigate = useNavigate();
   const { setCafeID } = useCafe();
-
-  useEffect(() => {
-    dispatch(fetchCafes(location));
-  }, [location, dispatch]);
-
-  const handleLocationChange = (event) => {
-    setLocation(event.target.value);
-  };
-
-  const handleEmployeesClick = (cafeId) => {
-    setCafeID(cafeId);
-    navigate(`/employees`);
-  };
-
-  const handleDeleteClick = (cafe) => {
-    setSelectedCafe(cafe);
-    setModalDeleteOpen(true);
-  };
 
   const columns = [
     {
@@ -91,6 +72,20 @@ const Cafes = () => {
     },
   ];
 
+  const handleLocationChange = (event) => {
+    setLocation(event.target.value);
+  };
+
+  const handleEmployeesClick = (cafeId) => {
+    setCafeID(cafeId);
+    navigate(`/employees`);
+  };
+
+  const handleDeleteClick = (cafe) => {
+    setSelectedCafe(cafe);
+    setModalDeleteOpen(true);
+  };
+
   const handleEditCafe = (cafe) => {
     setSelectedCafe(cafe);
     setModalEditOpen(true);
@@ -100,6 +95,10 @@ const Cafes = () => {
     setSelectedCafe(cafe);
     setModalDeleteOpen(true);
   };
+
+  useEffect(() => {
+    dispatch(fetchCafes(location));
+  }, [location, dispatch]);
 
   return (
     <Container>
@@ -117,18 +116,18 @@ const Cafes = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => setModalAddOpen(true)}
+        onClick={() => {
+          setModalAddOpen(true);
+        }}
       >
         Add New Cafe
       </Button>
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
       <div
         className="ag-theme-alpine"
         style={{ height: 400, width: "100%", marginTop: "20px" }}
       >
         <AgGridReact
-          rowData={cafes?.items}
+          rowData={cafes}
           columnDefs={columns}
           pagination={true}
           paginationPageSize={10}

@@ -1,8 +1,9 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
+  addEmployeeFailure,
+  addEmployeeSuccess,
   deleteEmployeeFailure,
   deleteEmployeeSuccess,
-  fetchEmployeesSuccess,
   fetchEmployeesWithCafeFailure,
   fetchEmployeesWithCafeSuccess,
   updateEmployeeFailure,
@@ -10,16 +11,11 @@ import {
 } from "../actions/employeeActions";
 import employeeService from "../../api/employeeService";
 import {
-  ADD_EMPLOYEE_FAILURE,
   ADD_EMPLOYEE_REQUEST,
-  ADD_EMPLOYEE_SUCCESS,
   DELETE_EMPLOYEE_REQUEST,
   FETCH_EMPLOYEES_WITH_CAFE_REQUEST,
-  UPDATE_EMPLOYEE_FAILURE,
   UPDATE_EMPLOYEE_REQUEST,
-  UPDATE_EMPLOYEE_SUCCESS,
 } from "../actions/types";
-import { deleteCafeSuccess } from "../actions/cafeActions";
 
 function* fetchEmployeesWithCafeSaga(action) {
   try {
@@ -39,22 +35,22 @@ function* createEmployeeSaga(action) {
       employeeService.createEmployee,
       action.payload
     );
-    yield put({ type: ADD_EMPLOYEE_SUCCESS, payload: newEmployee });
+    yield put(addEmployeeSuccess(newEmployee));
     // Fetch employees again to update the list after adding new cafe
     yield put({ type: FETCH_EMPLOYEES_WITH_CAFE_REQUEST });
   } catch (error) {
-    yield put({ type: ADD_EMPLOYEE_FAILURE, payload: error.message });
+    yield put(addEmployeeFailure(error.message));
   }
 }
 
 function* updateEmployeeSaga(action) {
   try {
     yield call(employeeService.updateEmployee, action.payload);
-    yield put({ type: UPDATE_EMPLOYEE_SUCCESS, payload: action.payload });
+    yield put(updateEmployeeSuccess(action.payload));
     // Fetch employees again to update the list after adding new cafe
     yield put({ type: FETCH_EMPLOYEES_WITH_CAFE_REQUEST });
   } catch (error) {
-    yield put({ type: UPDATE_EMPLOYEE_FAILURE, payload: error.message });
+    yield put(updateEmployeeFailure(error.message));
   }
 }
 
