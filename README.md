@@ -1,7 +1,7 @@
 ---
 ---
 
-# Cafe Employee Manager Application
+# Cafe Employee Management Application
 
 ## Overview
 
