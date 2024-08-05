@@ -8,7 +8,6 @@
         public string PhoneNumber { get; set; }
         public String Gender { get; set; }
         public string CafeId { get; set; }
-        public DateTime StartDate { get; set; }
     }
 }
 

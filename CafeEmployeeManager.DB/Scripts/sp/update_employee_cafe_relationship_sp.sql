@@ -4,13 +4,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `update_employee_cafe_relationship_s
     IN p_email_address VARCHAR(100),
     IN p_phone_number VARCHAR(8),
     IN p_gender ENUM('Male', 'Female'),
-    IN p_cafe_id VARCHAR(36),
-    IN p_start_date DATETIME(6)
+    IN p_cafe_id VARCHAR(36)
 )
 BEGIN
     DECLARE v_cafe_name VARCHAR(45);
-    DECLARE v_days_worked INT;
-
+    
 -- --------------------------------------------------------------------------------------
     -- Declare variables for error handling
     DECLARE result_code INT DEFAULT 0;
@@ -47,16 +45,11 @@ BEGIN
     FROM Cafe
     WHERE Id = p_cafe_id;
 
-    -- Calculate days worked
-    SET v_days_worked = DATEDIFF(CURDATE(), p_start_date);
-
     -- Update employee-cafe relationship
     UPDATE EmployeeCafeRelationship
     SET EmployeeName = p_name,
         CafeId = p_cafe_id,
-        CafeName = v_cafe_name,
-        StartDate = p_start_date,
-        DaysWorked = v_days_worked
+        CafeName = v_cafe_name
     WHERE EmployeeId = p_employee_id;
 
 	-- Commit the transaction

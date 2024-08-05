@@ -68,7 +68,7 @@ namespace CafeEmployeeManager.API.Repositories
                     parameters.Add("p_phone_number", request.PhoneNumber, DbType.String, ParameterDirection.Input);
                     parameters.Add("p_gender", request.Gender, DbType.String, ParameterDirection.Input);
                     parameters.Add("p_cafe_id", request.CafeId, DbType.String, ParameterDirection.Input);
-                    parameters.Add("p_start_date", request.StartDate, DbType.Date, ParameterDirection.Input);
+                    parameters.Add("p_start_date", request.StartDate.Date, DbType.Date, ParameterDirection.Input);
 
                     var result = await connection.QuerySingleAsync<dynamic>("add_employee_with_cafe_sp", parameters, commandType: CommandType.StoredProcedure);
 
@@ -155,7 +155,6 @@ namespace CafeEmployeeManager.API.Repositories
                     parameters.Add("p_phone_number", entity.PhoneNumber, DbType.String, ParameterDirection.Input);
                     parameters.Add("p_gender", entity.Gender, DbType.String, ParameterDirection.Input);
                     parameters.Add("p_cafe_id", entity.CafeId, DbType.String, ParameterDirection.Input);
-                    parameters.Add("p_start_date", entity.StartDate, DbType.Date, ParameterDirection.Input);
 
                     var result = await connection.QuerySingleAsync<dynamic>("update_employee_cafe_relationship_sp", parameters, commandType: CommandType.StoredProcedure);
 
@@ -169,6 +168,44 @@ namespace CafeEmployeeManager.API.Repositories
             {
                 return (-2, ex.Message);
             }
-        } 
+        }
+
+        public async Task<IEnumerable<EmployeeCafe>> GetEmployeesByCafeAsync(string cafeId = null)
+        {
+            var employees = new List<EmployeeCafe>();
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (var command = new MySqlCommand("get_employees_by_cafe_sp", connection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@cafeId", (object)cafeId ?? DBNull.Value);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var employee = new EmployeeCafe
+                            {
+                                EmployeeId = reader.GetString("id"),
+                                EmployeeName = reader.GetString("name"),
+                                Gender = reader.GetString("gender"),
+                                EmailAddress = reader.GetString("emailAddress"),
+                                PhoneNumber = reader.GetString("phoneNumber"),
+                                CafeId = reader.GetString("cafeId"),
+                                CafeName = reader.GetString("cafeName"),
+                                DaysWorked = reader.GetInt32("daysWorked")
+                            };
+                            employees.Add(employee);
+                        }
+                    }
+                }
+            }
+
+            return employees;
+        }
+
     }
 }
