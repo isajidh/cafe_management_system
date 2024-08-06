@@ -4,22 +4,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useDispatch } from "react-redux";
 import { updateCafe } from "../../redux/actions/cafeActions";
-import { makeStyles } from "@material-ui/core/styles";
 import MyTextBox from "../common/MyTextBox";
 import { Typography } from "@material-ui/core";
 import ImageUploader from "../common/ImageUploader";
 
-const useStyles = makeStyles(() => ({
-  formField: {
-    marginBottom: "16px",
-  },
-  fileInput: {
-    marginTop: "16px",
-  },
-}));
-
 const EditCafeModal = ({ open, onClose, cafe }) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     id: "",
@@ -78,8 +67,10 @@ const EditCafeModal = ({ open, onClose, cafe }) => {
   return (
     <Modal open={open} onClose={handleClose}>
       <Box component="form" onSubmit={handleSubmit} sx={{ ...modalStyle }}>
-        <div className={classes.modalContent}>
-          <Typography>Edit Café</Typography>
+        <div>
+          <Typography variant="h6" id="simple-modal-title">
+            Edit Café
+          </Typography>
           <MyTextBox
             label="Name"
             name="name"

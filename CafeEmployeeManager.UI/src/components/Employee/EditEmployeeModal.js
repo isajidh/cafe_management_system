@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { updateEmployeeRequest } from "../../redux/actions/employeeActions";
 import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
+import { Typography } from "@material-ui/core";
 import MyTextBox from "../common/MyTextBox";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,13 +22,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-    width: 400,
   },
   formField: {
     marginBottom: theme.spacing(2),
@@ -113,13 +107,11 @@ const EditEmployeeModal = ({ open, onClose, selectedEmployee }) => {
 
   return (
     <Modal open={open} onClose={handleClose} className={classes.modal}>
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ ...modalStyle }}
-        className={classes.paper}
-      >
+      <Box component="form" onSubmit={handleSubmit} sx={{ ...modalStyle }}>
         <div>
+          <Typography variant="h6" id="simple-modal-title">
+            Edit Café
+          </Typography>
           <MyTextBox
             label="Name"
             name="name"
