@@ -25,7 +25,12 @@ try
     // Register MYSQL database connection
     var mySqlConnectionString = builder.Configuration.GetConnectionString("MySQLConnectionString");
     builder.Services.AddDbContext<AppDbContext>(options =>
-           options.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString)));
+        options.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString), 
+            mySqlOptions => mySqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5, // Number of retry attempts
+                maxRetryDelay: TimeSpan.FromSeconds(10), // Delay between retries
+                errorNumbersToAdd: null // List of additional error numbers to retry on
+            )));
 
     // Register repository
     builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
@@ -41,6 +46,13 @@ try
                        .AllowAnyHeader()
                        .AllowAnyMethod();
             });
+             options.AddPolicy("AllowAllOrigins",
+            builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
     });
 
     var app = builder.Build();
@@ -50,12 +62,13 @@ try
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+        app.UseCors("AllowSpecificOrigin");
     }
 
     app.UseHttpsRedirection();
     app.UseRouting();
 
-    app.UseCors("AllowSpecificOrigin"); // Use the CORS policy
+    app.UseCors("AllowAllOrigins"); // Use the CORS policy
 
     app.UseAuthorization();
 

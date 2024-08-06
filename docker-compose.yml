@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: ./CafeEmployeeManager.API
+      dockerfile: Dockerfile
+    container_name: cafeemployeemanager.api
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__MySQLConnectionString=Server=db;Database=cafe_employee_management_db;User Id=root;Password=root;
+    depends_on:
+      - db
+    networks:
+      - cafeemployeemanager-network
+
+  db:
+    image: mysql:8.0
+    container_name: cafeemployeemanager.db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=cafe_employee_management_db
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - cafeemployeemanager-network
+
+  ui:
+    build:
+      context: ./CafeEmployeeManager.UI
+      dockerfile: Dockerfile
+    container_name: cafeemployeemanager.ui
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    environment:
+      - REACT_APP_API_URL=http://cafeemployeemanager.api:5000/api
+    networks:
+      - cafeemployeemanager-network
+
+volumes:
+  db_data:
+
+networks:
+  cafeemployeemanager-network:
