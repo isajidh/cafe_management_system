@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.39, for Win64 (x86_64)
 --
--- Host: localhost    Database: cafe_employee_manager_db
+-- Host: localhost    Database: cafe_employee_management_db
 -- ------------------------------------------------------
 -- Server version	8.0.39
 
@@ -16,14 +16,14 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `cafe_employee_manager_db`
+-- Current Database: `cafe_employee_management_db`
 --
 
-/*!40000 DROP DATABASE IF EXISTS `cafe_employee_manager_db`*/;
+/*!40000 DROP DATABASE IF EXISTS `cafe_employee_management_db`*/;
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `cafe_employee_manager_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `cafe_employee_management_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 
-USE `cafe_employee_manager_db`;
+USE `cafe_employee_management_db`;
 
 --
 -- Table structure for table `cafe`
@@ -112,9 +112,9 @@ INSERT INTO `employeecaferelationship` VALUES ('UI07f387e','Wei Xiang','40172cdc
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'cafe_employee_manager_db'
+-- Dumping routines for database 'cafe_employee_management_db'
 --
-/*!50003 DROP PROCEDURE IF EXISTS `add_cafe_sp` */;
+DROP PROCEDURE IF EXISTS `add_cafe_sp`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -124,7 +124,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_cafe_sp`(
+CREATE PROCEDURE `add_cafe_sp`(
     IN p_name VARCHAR(255),
     IN p_description TEXT,
     IN p_logo VARCHAR(255),
@@ -153,7 +153,7 @@ BEGIN
     START TRANSACTION;
 
     -- Insert the new cafe record
-    INSERT INTO Cafe (Id, Name, Description, Logo, Location)
+    INSERT INTO cafe (Id, Name, Description, Logo, Location)
     VALUES (v_uuid, p_name, p_description, p_logo, p_location);
 
     -- Commit the transaction
@@ -169,7 +169,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `add_employee_with_cafe` */;
+DROP PROCEDURE IF EXISTS `add_employee_with_cafe`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -179,7 +179,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_employee_with_cafe`(
+CREATE PROCEDURE `add_employee_with_cafe`(
     IN p_name VARCHAR(100),
     IN p_email_address VARCHAR(100),
     IN p_phone_number VARCHAR(10),
@@ -234,7 +234,7 @@ BEGIN
     SET v_days_worked = DATEDIFF(CURDATE(), p_start_date);
     
         -- Insert the new employee
-        INSERT INTO Employee (id, name, emailaddress, phonenumber, gender)
+        INSERT INTO employee (id, name, emailaddress, phonenumber, gender)
         VALUES (p_id, p_name, p_email_address, p_phone_number, p_gender);
 
         -- Insert the relationship
@@ -255,7 +255,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `add_employee_with_cafe_sp` */;
+DROP PROCEDURE IF EXISTS `add_employee_with_cafe_sp`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -265,7 +265,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_employee_with_cafe_sp`(
+CREATE PROCEDURE `add_employee_with_cafe_sp`(
     IN p_name VARCHAR(100),
     IN p_email_address VARCHAR(100),
     IN p_phone_number VARCHAR(10),
@@ -306,7 +306,7 @@ BEGIN
         -- Fetch the cafe name by cafe id (if provided)
         IF p_cafe_id IS NOT NULL AND p_cafe_id != '' THEN
             SELECT name INTO v_cafe_name
-            FROM Cafe
+            FROM cafe
             WHERE id = p_cafe_id;
 
             -- Check if cafe name was found
@@ -321,7 +321,7 @@ BEGIN
         SET v_days_worked = DATEDIFF(CURDATE(), p_start_date);
 
         -- Insert the new employee
-        INSERT INTO Employee (id, name, emailaddress, phonenumber, gender)
+        INSERT INTO employee (id, name, emailaddress, phonenumber, gender)
         VALUES (p_id, p_name, p_email_address, p_phone_number, p_gender);
 
 		-- If cafeId is provided, insert the relationship
@@ -347,7 +347,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `delete_cafe_and_employees_sp` */;
+DROP PROCEDURE IF EXISTS `delete_cafe_and_employees_sp`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -357,7 +357,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_cafe_and_employees_sp`(
+CREATE PROCEDURE `delete_cafe_and_employees_sp`(
     IN p_cafe_id VARCHAR(36)
 )
 BEGIN
@@ -379,7 +379,7 @@ BEGIN
     -- Start the transaction
     START TRANSACTION;
 	
-	SELECT Name INTO v_cafe_name FROM Cafe WHERE id = p_cafe_id;
+	SELECT Name INTO v_cafe_name FROM cafe WHERE id = p_cafe_id;
 
     -- Check if the employee exists
     IF v_cafe_name IS NULL THEN
@@ -410,7 +410,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `delete_employee_sp` */;
+DROP PROCEDURE IF EXISTS `delete_employee_sp`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -420,7 +420,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_employee_sp`(
+CREATE PROCEDURE `delete_employee_sp`(
     IN p_employee_id VARCHAR(10)
 )
 BEGIN
@@ -442,7 +442,7 @@ BEGIN
     START TRANSACTION;
 
     -- Select employee name to check if it exists
-    SELECT Name INTO v_employee_name FROM Employee WHERE Id = p_employee_id;
+    SELECT Name INTO v_employee_name FROM employee WHERE Id = p_employee_id;
     
     -- Check if the employee exists
     IF v_employee_name IS NULL THEN
@@ -457,7 +457,7 @@ BEGIN
     DELETE FROM EmployeeCafeRelationship WHERE EmployeeId = p_employee_id;
 
     -- Delete the employee
-    DELETE FROM Employee WHERE Id = p_employee_id;
+    DELETE FROM employee WHERE Id = p_employee_id;
 
     COMMIT;
 
@@ -469,7 +469,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `get_all_employees_sp` */;
+DROP PROCEDURE IF EXISTS `get_all_employees_sp`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -479,7 +479,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_employees_sp`()
+CREATE PROCEDURE `get_all_employees_sp`()
 BEGIN
 
     -- Declare variables for error handling
@@ -508,7 +508,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `get_cafes_sp` */;
+DROP PROCEDURE IF EXISTS `get_cafes_sp`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -518,7 +518,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cafes_sp`(
+CREATE PROCEDURE `get_cafes_sp`(
 	IN loc VARCHAR(100)
 )
 BEGIN
@@ -563,7 +563,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `get_employees_by_cafe_sp` */;
+DROP PROCEDURE IF EXISTS `get_employees_by_cafe_sp`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -573,7 +573,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_employees_by_cafe_sp`(
+CREATE PROCEDURE `get_employees_by_cafe_sp`(
     IN cafeId VARCHAR(36)
 )
 BEGIN
@@ -604,7 +604,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `update_cafe_sp` */;
+DROP PROCEDURE IF EXISTS `update_cafe_sp`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -614,7 +614,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_cafe_sp`(
+CREATE PROCEDURE `update_cafe_sp`(
     IN p_id VARCHAR(36),
     IN p_name VARCHAR(255),
     IN p_description TEXT,
@@ -658,7 +658,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `update_employee_and_cafe_relationship` */;
+DROP PROCEDURE IF EXISTS `update_employee_and_cafe_relationship`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -668,7 +668,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_employee_and_cafe_relationship`(
+CREATE PROCEDURE `update_employee_and_cafe_relationship`(
     IN p_employee_id VARCHAR(10),
     IN p_name VARCHAR(100),
     IN p_email_address VARCHAR(100),
@@ -736,7 +736,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `update_employee_cafe_relationship_sp` */;
+DROP PROCEDURE IF EXISTS `update_employee_cafe_relationship_sp`;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -746,7 +746,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_employee_cafe_relationship_sp`(
+CREATE PROCEDURE `update_employee_cafe_relationship_sp`(
     IN p_employee_id VARCHAR(10),
     IN p_name VARCHAR(100),
     IN p_email_address VARCHAR(100),
@@ -783,7 +783,7 @@ BEGIN
 
     -- Fetch the cafe name by cafe id
     SELECT Name INTO v_cafe_name
-    FROM Cafe
+    FROM cafe
     WHERE Id = p_cafe_id;
 
     -- If cafeId is provided, check if the cafe exists, then update the relationship
