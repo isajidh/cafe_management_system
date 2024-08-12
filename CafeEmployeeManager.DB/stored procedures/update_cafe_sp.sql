@@ -22,12 +22,12 @@ BEGIN
     -- Start the transaction
     START TRANSACTION;
     
-    UPDATE Cafe
+    UPDATE cafe
     SET Name = p_name,
         Description = p_description,
-        Logo = p_logo,
-        Location = p_location
-    WHERE Id = p_id;
+        logo = p_logo,
+        location = p_location
+    WHERE id = p_id;
     
 	-- Commit the transaction
     COMMIT;

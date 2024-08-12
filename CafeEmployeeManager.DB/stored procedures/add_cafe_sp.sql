@@ -27,7 +27,7 @@ BEGIN
     START TRANSACTION;
 
     -- Insert the new cafe record
-    INSERT INTO Cafe (Id, Name, Description, Logo, Location)
+    INSERT INTO cafe (Id, Name, Description, Logo, Location)
     VALUES (v_uuid, p_name, p_description, p_logo, p_location);
 
     -- Commit the transaction

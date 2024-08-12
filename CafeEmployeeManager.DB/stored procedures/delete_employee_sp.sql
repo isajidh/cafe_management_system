@@ -32,14 +32,13 @@ BEGIN
     END IF;
 
     -- Delete employee-cafe relationships for the employee
-    DELETE FROM EmployeeCafeRelationship WHERE EmployeeId = p_employee_id;
+    DELETE FROM employeecaferelationship WHERE employeeid = p_employee_id;
 
     -- Delete the employee
-    DELETE FROM Employee WHERE Id = p_employee_id;
+    DELETE FROM employee WHERE Id = p_employee_id;
 
     COMMIT;
 
-    SET result_code = 0;
     SET result_message = CONCAT('Employee ', v_employee_name, ' deleted successfully');
-    SELECT result_code AS result_code, result_message AS result_message;
+    SELECT 0 AS result_code, result_message AS result_message;
 END

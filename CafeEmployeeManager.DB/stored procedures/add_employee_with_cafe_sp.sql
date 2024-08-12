@@ -39,7 +39,7 @@ BEGIN
         -- Fetch the cafe name by cafe id (if provided)
         IF p_cafe_id IS NOT NULL AND p_cafe_id != '' THEN
             SELECT name INTO v_cafe_name
-            FROM Cafe
+            FROM cafe
             WHERE id = p_cafe_id;
 
             -- Check if cafe name was found
@@ -54,16 +54,16 @@ BEGIN
         SET v_days_worked = DATEDIFF(CURDATE(), p_start_date);
 
         -- Insert the new employee
-        INSERT INTO Employee (id, name, emailaddress, phonenumber, gender)
+        INSERT INTO employee (id, name, emailaddress, phonenumber, gender)
         VALUES (p_id, p_name, p_email_address, p_phone_number, p_gender);
 
 		-- If cafeId is provided, insert the relationship
 		IF p_cafe_id IS NOT NULL AND p_cafe_id != '' THEN
-			INSERT INTO EmployeeCafeRelationship (employeeid, employeename, cafeid, cafename, startdate, daysworked)
+			INSERT INTO employeecaferelationship (employeeid, employeename, cafeid, cafename, startdate, daysworked)
 			VALUES (p_id, p_name, p_cafe_id, v_cafe_name, p_start_date, v_days_worked);
 		ELSE
 			-- If no cafeId is given
-			INSERT INTO EmployeeCafeRelationship (employeeid, employeename, cafeid, startdate, daysworked)
+			INSERT INTO employeecaferelationship (employeeid, employeename, cafeid, startdate, daysworked)
 			VALUES (p_id, p_name, -1 ,p_start_date, v_days_worked);
 		END IF;        
 
