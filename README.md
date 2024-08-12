@@ -29,16 +29,16 @@ cd cafe_management_system
 ### 2. Setting Up the MySQL Database
 
 1. **Create a Database**:
-   open this [script](./CafeEmployeeManager.DB/cafe%20management%20schema/cafe_management_schema.sql)
+   open this [script](./CafeEmployeeManager.DB/cafe%20management%20schema/cafe_employee_management_schema.sql)
    copy the content in it copy eveything.
    open a new query page in MYSQL
    paste in the text
    execute all
 
 2. **Import the Database Schema and Data**:
-   Use the provided `cafe_management_schema.sql` file to set up the database schema and data:
+   Use the provided `cafe_employee_management_schema.sql` file to set up the database schema and data:
    ```sh
-   mysql -u root -p cafe_management_db < path/to/cafe_management_schema.sql
+   mysql -u root -p cafe_management_db < path/to/cafe_employee_management_schema.sql
    ```
 
 ### 3. Setting Up the .NET Core Web API
@@ -60,7 +60,7 @@ cd cafe_management_system
 
    ```json
    "ConnectionStrings": {
-     "DefaultConnection": "Server=localhost;Database=cafe_management_db;User=root;Password=yourpassword;"
+     "DefaultConnection": "Server=localhost;Database=cafe_employee_management_db;User=root;Password=yourpassword;"
    }
    ```
 
@@ -146,8 +146,8 @@ Before you begin, ensure you have the following installed on your machine:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-repo/cafe-employee-manager.git
-cd cafe-employee-manager
+git clone https://github.com/isajidh/cafe_management_system.git
+cd cafe_management_system
 ```
 
 ### 2. Build and Run the Docker Containers
