@@ -32,11 +32,11 @@ BEGIN
     END IF;
 
     -- Delete employees associated with the cafe
-    DELETE FROM EmployeeCafeRelationship
-    WHERE CafeId = p_cafe_id;
+    DELETE FROM employeecaferelationship
+    WHERE cafeid = p_cafe_id;
 
     -- Delete the cafe
-    DELETE FROM Cafe
+    DELETE FROM cafe
     WHERE Id = p_cafe_id;
     
     -- Commit the transaction

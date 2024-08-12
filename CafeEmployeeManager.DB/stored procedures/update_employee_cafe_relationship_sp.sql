@@ -26,7 +26,7 @@ BEGIN
     START TRANSACTION;
 
     -- Update employee details
-    UPDATE Employee
+    UPDATE employee
     SET Name = p_name,
         EmailAddress = p_email_address,
         PhoneNumber = p_phone_number,
@@ -35,14 +35,14 @@ BEGIN
 
     -- Fetch the cafe name by cafe id
     SELECT Name INTO v_cafe_name
-    FROM Cafe
+    FROM cafe
     WHERE Id = p_cafe_id;
 
     -- If cafeId is provided, check if the cafe exists, then update the relationship
     IF p_cafe_id IS NOT NULL AND p_cafe_id != '' THEN
         IF v_cafe_name IS NOT NULL THEN
             -- Cafe exists, update the relationship
-                UPDATE EmployeeCafeRelationship 
+                UPDATE employeecaferelationship 
                 SET EmployeeId = p_employee_id,
 					EmployeeName = p_name,
                     CafeId = p_cafe_id,
