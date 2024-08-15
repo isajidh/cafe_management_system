@@ -8,7 +8,7 @@ import MyTextBox from "../common/MyTextBox";
 import { Typography } from "@material-ui/core";
 import ImageUploader from "../common/ImageUploader";
 
-const EditCafeModal = ({ open, onClose, cafe }) => {
+const EditCafeModal = ({ open, close, cafe }) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     id: "",
@@ -47,7 +47,7 @@ const EditCafeModal = ({ open, onClose, cafe }) => {
     e.preventDefault();
     dispatch(updateCafe(formData));
     setUnsavedChanges(false);
-    onClose();
+    close();
   };
 
   const handleClose = () => {
@@ -57,10 +57,10 @@ const EditCafeModal = ({ open, onClose, cafe }) => {
           "You have unsaved changes. Are you sure you want to close?"
         )
       ) {
-        onClose();
+        close();
       }
     } else {
-      onClose();
+      close();
     }
   };
 

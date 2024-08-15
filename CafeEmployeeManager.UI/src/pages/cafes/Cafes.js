@@ -154,7 +154,7 @@ const Cafes = () => {
       {selectedCafe && (
         <EditCafeModal
           open={modalEditOpen}
-          onClose={() => setModalEditOpen(false)}
+          close={() => setModalEditOpen(false)}
           onSubmit={handleEditCafe}
           cafe={selectedCafe}
         />
